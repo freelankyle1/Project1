@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Headers/window.h"
-
+//blahblah
 window::windowClass window::windowClass::wndClass;
 
 window::windowClass::windowClass()
