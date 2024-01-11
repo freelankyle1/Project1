@@ -18,9 +18,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 	
 
-	//gfsgsdg
-	//blah blah blah git fetching
-	//checking more fetching
+	//all comments deleted
 
 	return msg.wParam;
 }
