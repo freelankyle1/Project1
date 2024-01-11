@@ -19,6 +19,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	
 
 	//gfsgsdg
+	//new commit after current commit
+	//another commit
+	//changes
 
 
 	return msg.wParam;
