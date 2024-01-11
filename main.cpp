@@ -17,6 +17,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 	
+
+	//gfsgsdg
+
+
 	return msg.wParam;
 }
 
