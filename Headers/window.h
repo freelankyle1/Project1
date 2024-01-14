@@ -1,10 +1,24 @@
 #pragma once
 #include "pch.h"
-
-
+#include "d3dexception.h"
 
 class window
 {
+	class Exception : public parentException
+	{
+	public:
+		Exception(int line, const char* file, HRESULT hr) noexcept;
+		const char* what() const noexcept override;
+		virtual const char* getType() const noexcept;
+		static std::string translateErrorCode(HRESULT hr) noexcept;
+		HRESULT getErrorCode() const noexcept;
+		std::string getErrorString() const noexcept;
+
+	public:
+		HRESULT m_hr;
+
+	};
+
 	class windowClass
 	{
 	public:
@@ -41,3 +55,7 @@ private:
 
 
 };
+
+//#define PARENT_EXCEPT (hr) window::Exception(__LINE__,__FILE__, m_hr)
+#define parentExcept(hr) window::Exception(__LINE__, __FILE__, hr)
+#define parentLastExcept() window::Exception(__LINE__, __FILE__, GetLastError())

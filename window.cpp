@@ -9,7 +9,6 @@ window::windowClass::windowClass()
 
     WNDCLASSEX m_wc;
 
-
     // clear out the window class for use
     ZeroMemory(&m_wc, sizeof(WNDCLASSEX));
 
@@ -47,12 +46,11 @@ const char* window::windowClass::getName() noexcept
     return m_wndClassName;
 }
 
+//window stuff
+//******************************************************************************************************
+//******************************************************************************************************
+//******************************************************************************************************
 
-//******************************************************************************************************
-//******************************************************************************************************
-//******************************************************************************************************
-//******************************************************************************************************
-//******************************************************************************************************
 
 window::window(int width, int height, const char* name)
     : m_width(width), m_height(height), m_name(name)
@@ -68,15 +66,19 @@ window::window(int width, int height, const char* name)
 
     //adjusts the window to how we want it
     //specify the styles...Caption   +  border   +  Minimizebox   No menu
-    AdjustWindowRect(&rc, WS_CAPTION | WS_BORDER | WS_MINIMIZEBOX | WS_SYSMENU, FALSE);
+   AdjustWindowRect(&rc, WS_CAPTION | WS_BORDER | WS_MINIMIZEBOX | WS_SYSMENU, FALSE);
 
-    m_hWnd = CreateWindow(
-        windowClass::getName(), name,
+
+    m_hWnd = CreateWindowA(
+        window::windowClass::getName(), name,
         WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
         CW_USEDEFAULT, CW_USEDEFAULT, 
         rc.right - rc.left, rc.bottom - rc.top,
         nullptr, nullptr, windowClass::getInstance(), this
     );
+
+    if (m_hWnd == nullptr)
+        throw parentLastExcept();
 
     ShowWindow(m_hWnd, SW_SHOWDEFAULT);
 
@@ -146,4 +148,56 @@ LRESULT window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 HWND window::getHandle() const
 {
     return m_hWnd;
+}
+
+
+//window exception stuff
+//******************************************************************************************************
+
+window::Exception::Exception(int line, const char* file, HRESULT hr) noexcept
+    : parentException(line, file), m_hr(hr)
+{}
+
+const char* window::Exception::what() const noexcept
+{
+    std::ostringstream oss;
+    oss << getType() << std::endl
+        << "[Error Code] " << getErrorCode() << std::endl
+        << "[Description] " << getErrorString() << std::endl
+        << getOriginSTring();
+    whatBuffer = oss.str();
+    return whatBuffer.c_str();
+}
+
+const char* window::Exception::getType() const noexcept
+{
+    return "My window Exception";
+}
+
+std::string window::Exception::translateErrorCode(HRESULT hr) noexcept
+{
+    char* src = nullptr;
+
+    DWORD msgLen = FormatMessageA(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr,
+        hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+        reinterpret_cast<LPSTR> (&src), 0, nullptr);
+
+    
+    if (msgLen == 0)
+        return "Unidentified error code";
+
+    std::string errorString = src;
+    LocalFree(src);
+    return errorString;
+}
+
+HRESULT window::Exception::getErrorCode() const noexcept
+{
+    return m_hr;
+}
+
+std::string window::Exception::getErrorString() const noexcept
+{
+    return translateErrorCode(m_hr);
 }

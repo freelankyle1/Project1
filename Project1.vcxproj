@@ -139,6 +139,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="d3dexception.cpp" />
+    <ClCompile Include="gametimer.cpp" />
+    <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -147,7 +150,10 @@
     <ClCompile Include="window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Headers\d3dexception.h" />
     <ClInclude Include="Headers\fileutil.h" />
+    <ClInclude Include="Headers\gametimer.h" />
+    <ClInclude Include="Headers\keyboard.h" />
     <ClInclude Include="Headers\renderer.h" />
     <ClInclude Include="Headers\storestuff.h" />
     <ClInclude Include="Headers\window.h" />
