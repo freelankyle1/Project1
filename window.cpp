@@ -89,6 +89,15 @@ window::~window()
     DestroyWindow(m_hWnd);
 }
 
+void window::SetTitle(const std::string& title)
+{
+    if (SetWindowText(m_hWnd, title.c_str()) == 0)
+    {
+        throw parentLastExcept();
+    }
+}
+
+
 LRESULT CALLBACK window::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
     // use create parameter passed in from Createwindow() to store window class pointer at WinAPI side
@@ -121,25 +130,96 @@ LRESULT window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
     switch (msg)
     {
     case(WM_CLOSE):
-    {
         PostQuitMessage(0);
         return 0;
 
-    }break;
+    case WM_KILLFOCUS:
+        kbd.ClearState();
+        break;
+
+    case (WM_MOUSEMOVE):
+    {
+        const POINTS pt = MAKEPOINTS(lParam);
+
+        if (pt.x >= 0 && pt.x < m_width && pt.y >= 0 && pt.y < m_height)
+        {
+            m_mouse.OnMouseMove(pt.x, pt.y);
+            if (!m_mouse.IsInWindow())
+            {
+                SetCapture(hWnd);
+                m_mouse.OnMouseEnter();
+            }
+
+        }
+        else
+        {
+            if (wParam & (MK_LBUTTON | MK_RBUTTON))
+            {
+                m_mouse.OnMouseMove(pt.x, pt.y);
+            }
+            else
+            {
+                ReleaseCapture();
+                m_mouse.OnMouseLeave();
+            }
+        }
+
+        break;
+    }
+    case (WM_LBUTTONDOWN):
+    {
+        const POINTS pt = MAKEPOINTS(lParam);
+        m_mouse.OnLeftPressed(pt.x, pt.y);
+        break;
+    }
+    case (WM_RBUTTONDOWN):
+    {
+        const POINTS pt = MAKEPOINTS(lParam);
+        m_mouse.OnRightPressed(pt.x, pt.y);
+        break;
+    }
+    case (WM_LBUTTONUP):
+    {
+        const POINTS pt = MAKEPOINTS(lParam);
+        m_mouse.OnLeftReleased(pt.x, pt.y);
+        break;
+    }
+    case (WM_RBUTTONUP):
+    {
+        const POINTS pt = MAKEPOINTS(lParam);
+        m_mouse.OnRightReleased(pt.x, pt.y);
+        break;
+    }
+    case (WM_MOUSEWHEEL):
+    {
+        const POINTS pt = MAKEPOINTS(lParam);
+        if (GET_WHEEL_DELTA_WPARAM(wParam) > 0)
+        {
+            m_mouse.OnWheelUp(pt.x, pt.y);
+        }
+        else if (GET_WHEEL_DELTA_WPARAM(wParam) < 0)
+        {
+            m_mouse.OnWheelDown(pt.x, pt.y);
+        }
+        break;
+    }
+
+    
     case(WM_KEYDOWN):
-    {
-        //SetWindowText(hWnd, "pressingdown!");
 
-    }break;
+    case(WM_SYSKEYDOWN):
+        if (!(lParam & 0x40000000) || kbd.AutorepeatIsEnabled())
+        {
+            kbd.OnKeyPressed(static_cast<unsigned char>(wParam));
+        }
+        break;
     case(WM_KEYUP):
-    {
-        //SetWindowText(hWnd, "pressingup!");
-
-    }break;
+    case(WM_SYSKEYUP):
+        kbd.OnKeyReleased(static_cast<unsigned char>(wParam));
+        break;
     case(WM_CHAR):
-    {
-        
-    }break;
+        kbd.OnChar(static_cast<unsigned char>(wParam));
+        break;
     }
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }

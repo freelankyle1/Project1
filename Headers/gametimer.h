@@ -9,7 +9,9 @@ public:
 	gameTimer();
 
 	FLOAT gameTime();
-	FLOAT deltaTime();
+	FLOAT deltaTime() CONST;
+	FLOAT totalTime() CONST;
+
 
 	void reset();
 	void start();

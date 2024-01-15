@@ -1,6 +1,8 @@
 #pragma once
 #include "pch.h"
 #include "d3dexception.h"
+#include "keyboard.h"
+#include "Mouse.h"
 
 class window
 {
@@ -38,6 +40,7 @@ public:
 	~window();
 	window(const window&) = delete;
 	window operator=(const window&) = delete;
+	void SetTitle(const std::string&);
 
 	HWND getHandle() const;
 	
@@ -46,6 +49,10 @@ private:
 	static LRESULT CALLBACK HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 	LRESULT HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 	
+public:
+	Keyboard kbd;
+	kMouse m_mouse;
+
 private:
 	int m_height;
 	int m_width;
@@ -56,6 +63,5 @@ private:
 
 };
 
-//#define PARENT_EXCEPT (hr) window::Exception(__LINE__,__FILE__, m_hr)
 #define parentExcept(hr) window::Exception(__LINE__, __FILE__, hr)
 #define parentLastExcept() window::Exception(__LINE__, __FILE__, GetLastError())

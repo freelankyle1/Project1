@@ -76,7 +76,7 @@ private:
 private:
 	static constexpr unsigned int nKeys = 256u;
 	static constexpr unsigned int bufferSize = 16u;
-	bool autorepeastEnabled = false;
+	bool autorepeatEnabled = false;
 	std::bitset<nKeys> keystates;
 	std::queue<Event> keybuffer;
 	std::queue<char> charbuffer;

@@ -23,6 +23,8 @@
 #include <fstream>
 #include <sstream>
 #include <cassert>
+#include <queue>
+#include <optional>
 
 #define SCREEN_WIDTH  1280
 #define SCREEN_HEIGHT 720
