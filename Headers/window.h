@@ -31,8 +31,9 @@ class window
 		windowClass();
 		~windowClass();
 		static windowClass wndClass;
-		static constexpr const char* m_wndClassName = "Kyles Game Window";
+		static constexpr const char* const m_wndClassName = "Kyles Game Window";
 		HINSTANCE m_hInstance;
+		WNDCLASSEX m_wc;
 	};
 
 public:
@@ -41,6 +42,7 @@ public:
 	window(const window&) = delete;
 	window operator=(const window&) = delete;
 	void SetTitle(const std::string&);
+	static std::optional<int> ProcessMessages();
 
 	HWND getHandle() const;
 	

@@ -7,7 +7,6 @@ window::windowClass::windowClass()
 	: m_hInstance(GetModuleHandle(nullptr))
 {
 
-    WNDCLASSEX m_wc;
 
     // clear out the window class for use
     ZeroMemory(&m_wc, sizeof(WNDCLASSEX));
@@ -20,14 +19,17 @@ window::windowClass::windowClass()
     m_wc.cbWndExtra = 0;
     m_wc.hInstance = getInstance();
     m_wc.hIcon = nullptr;
-    m_wc.hbrBackground = nullptr;
+    m_wc.hbrBackground = (HBRUSH)BLACK_BRUSH;
     m_wc.hCursor = LoadCursor(NULL, IDC_ARROW);
     m_wc.lpszClassName = getName();
     m_wc.hIconSm = nullptr;
 
 
     // register the window class
-    RegisterClassEx(&m_wc);
+    if (!(RegisterClassEx(&m_wc)))
+    {
+        throw(parentLastExcept());
+    }
 
 }
 
@@ -53,7 +55,7 @@ const char* window::windowClass::getName() noexcept
 
 
 window::window(int width, int height, const char* name)
-    : m_width(width), m_height(height), m_name(name)
+    : m_width(width), m_height(height), m_name(name), m_hWnd(0)
 {
     //the rect structure defines a rectangle by the coordinates of its
     //upper left and lower right corners
@@ -77,9 +79,10 @@ window::window(int width, int height, const char* name)
         nullptr, nullptr, windowClass::getInstance(), this
     );
 
+    
     if (m_hWnd == nullptr)
         throw parentLastExcept();
-
+       
     ShowWindow(m_hWnd, SW_SHOWDEFAULT);
 
 }
@@ -96,6 +99,25 @@ void window::SetTitle(const std::string& title)
         throw parentLastExcept();
     }
 }
+
+std::optional<int> window::ProcessMessages()
+{
+    MSG msg = { 0 };
+
+    while (PeekMessageA(&msg, nullptr, 0, 0, PM_REMOVE))
+    {
+        if (msg.message == WM_QUIT)
+        {
+            return msg.wParam;
+        }
+
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+      
+    return {};
+}
+
 
 
 LRESULT CALLBACK window::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
