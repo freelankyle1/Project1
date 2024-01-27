@@ -3,8 +3,14 @@
 #include "d3dexception.h"
 #include "keyboard.h"
 #include "Mouse.h"
+#include "graphics.h"
 
-class window
+namespace GameCore
+{
+	extern HWND hWnd;
+}
+
+class window : public NonCopyable
 {
 	class Exception : public parentException
 	{
@@ -43,6 +49,7 @@ public:
 	window operator=(const window&) = delete;
 	void SetTitle(const std::string&);
 	static std::optional<int> ProcessMessages();
+	Graphics& Gfx();
 
 	HWND getHandle() const;
 	
@@ -55,12 +62,15 @@ public:
 	Keyboard kbd;
 	kMouse m_mouse;
 
+
 private:
 	int m_height;
 	int m_width;
 	const char* m_name;
 
 	HWND m_hWnd;
+
+	std::unique_ptr<Graphics> m_gfx;
 
 
 };

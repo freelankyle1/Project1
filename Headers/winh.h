@@ -20,7 +20,7 @@
 #define NOCTLMGR
 #define NODRAWTEXT
 #define NOKERNEL
-#define NONLS
+//#define NONLS
 #define NOMEMMGR
 #define NOMETAFILE
 #define NOOPENFILE
@@ -44,5 +44,4 @@
 #define NOMINMAX
 
 #define STRICT
-
 #include <Windows.h>

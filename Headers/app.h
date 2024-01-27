@@ -8,7 +8,7 @@ class App
 public:
 	App();
 
-	int Go();
+	WPARAM Go();
 
 private:
 	void DoFrame();

@@ -85,6 +85,7 @@ window::window(int width, int height, const char* name)
        
     ShowWindow(m_hWnd, SW_SHOWDEFAULT);
 
+    m_gfx = std::make_unique<Graphics>(m_hWnd);
 }
 
 window::~window()
@@ -118,6 +119,10 @@ std::optional<int> window::ProcessMessages()
     return {};
 }
 
+Graphics& window::Gfx()
+{
+    return *m_gfx;
+}
 
 
 LRESULT CALLBACK window::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
@@ -266,7 +271,7 @@ const char* window::Exception::what() const noexcept
     oss << getType() << std::endl
         << "[Error Code] " << getErrorCode() << std::endl
         << "[Description] " << getErrorString() << std::endl
-        << getOriginSTring();
+        << getOriginString();
     whatBuffer = oss.str();
     return whatBuffer.c_str();
 }

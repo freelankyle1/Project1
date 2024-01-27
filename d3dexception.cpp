@@ -8,7 +8,7 @@ parentException::parentException(int line, const char* file) noexcept
 const char* parentException::what() const noexcept
 {
 	std::ostringstream oss;
-	oss << getType() << std::endl << getOriginSTring();
+	oss << getType() << std::endl << getOriginString();
 	whatBuffer = oss.str();
 	return whatBuffer.c_str();
 }
@@ -28,7 +28,7 @@ const std::string& parentException::getFile() const noexcept
 	return file;
 }
 
-std::string parentException::getOriginSTring() const noexcept
+std::string parentException::getOriginString() const noexcept
 {
 	std::ostringstream oss;
 	oss << "[File] " << file << std::endl

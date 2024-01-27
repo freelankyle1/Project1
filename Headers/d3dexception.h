@@ -10,7 +10,7 @@ public:
 	virtual const char* getType() const noexcept;
 	int getLine() const noexcept;
 	const std::string& getFile() const noexcept;
-	std::string getOriginSTring() const noexcept;
+	std::string getOriginString() const noexcept;
 
 private:
 	int line;

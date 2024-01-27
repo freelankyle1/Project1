@@ -1,7 +1,7 @@
 #pragma once
 #include "../pch.h"
 
-class kMouse
+class kMouse : NonCopyable
 {
 	friend class window;
 
@@ -76,8 +76,8 @@ public:
 	
 public:
 	kMouse() = default;
-	kMouse(const kMouse&) = delete;
-	kMouse& operator=(const kMouse&) = delete;
+	//kMouse(const kMouse&) = delete;
+	//kMouse& operator=(const kMouse&) = delete;
 	std::pair<int, int> GetPos() const noexcept;
 	int GetPosX() const noexcept;
 	int GetPosY() const noexcept;
