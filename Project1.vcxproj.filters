@@ -30,75 +30,81 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Source Files\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="window.cpp">
+    <ClCompile Include="Source Files\window.cpp">
       <Filter>Source Files\initialization</Filter>
     </ClCompile>
-    <ClCompile Include="pch.cpp">
+    <ClCompile Include="Source Files\pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="d3dexception.cpp">
+    <ClCompile Include="Source Files\d3dexception.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Keyboard.cpp">
+    <ClCompile Include="Source Files\Keyboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gametimer.cpp">
+    <ClCompile Include="Source Files\mouse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mouse.cpp">
+    <ClCompile Include="Source Files\app.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="app.cpp">
+    <ClCompile Include="Source Files\timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="timer.cpp">
+    <ClCompile Include="Source Files\graphics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="graphics.cpp">
+    <ClCompile Include="Source Files\buffers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\asserts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Headers\fileutil.h">
+    <ClInclude Include="Source Files\Headers\fileutil.h">
       <Filter>Source Files\utils</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\window.h">
+    <ClInclude Include="Source Files\Headers\window.h">
       <Filter>Header Files\initialization</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\winh.h">
+    <ClInclude Include="Source Files\Headers\winh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="pch.h">
+    <ClInclude Include="Source Files\Headers\pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\d3dexception.h">
+    <ClInclude Include="Source Files\Headers\d3dexception.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\keyboard.h">
+    <ClInclude Include="Source Files\Headers\keyboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\gametimer.h">
+    <ClInclude Include="Source Files\Headers\d3dapp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\d3dapp.h">
+    <ClInclude Include="Source Files\Headers\Mouse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\Mouse.h">
+    <ClInclude Include="Source Files\Headers\app.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\app.h">
+    <ClInclude Include="Source Files\Headers\timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\timer.h">
+    <ClInclude Include="Source Files\Headers\graphics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\graphics.h">
+    <ClInclude Include="Source Files\Headers\asserts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\asserts.h">
+    <ClInclude Include="Source Files\Headers\Rendering\buffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source Files\Headers\Rendering\buffers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -106,7 +112,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shader\VertexShader.hlsl" />
-    <FxCompile Include="Shader\PixelShader.hlsl" />
+    <FxCompile Include="Source Files\Shaders\VertexShader.hlsl" />
+    <FxCompile Include="Source Files\Shaders\PixelShader.hlsl" />
   </ItemGroup>
 </Project>

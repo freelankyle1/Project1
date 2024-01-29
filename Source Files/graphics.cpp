@@ -1,6 +1,7 @@
-#include "pch.h"
+#include "Headers/pch.h"
 #include "Headers/graphics.h"
 #include "Headers/asserts.h"
+#include "Headers/Rendering/buffers.h"
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 
@@ -41,13 +42,47 @@ Graphics::Graphics(HWND hWnd)
 	ASSERT(hr, "Create Device and Swap Chain");
 
 	ComPtr<ID3D11Resource> pBackBuffer;
-	
 	hr = m_SwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer);
 	ASSERT(hr, "Swap Chain Get Buffer");
 
 	hr = m_Device->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &m_RTView);
 	ASSERT(hr, "Create Render Target View");
 
+	D3D11_DEPTH_STENCIL_DESC dsd = {};
+	dsd.DepthEnable = TRUE;
+	dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	dsd.DepthFunc = D3D11_COMPARISON_LESS;
+
+	ComPtr<ID3D11DepthStencilState> pDState;
+	hr = m_Device->CreateDepthStencilState(&dsd, &pDState);
+	ASSERT(hr, "failed to create depth stencil state");
+	
+	m_DevContext->OMSetDepthStencilState(pDState.Get(), 1u);
+
+	ComPtr<ID3D11Texture2D> pDepthStencil;
+	D3D11_TEXTURE2D_DESC descDepth = {};
+	descDepth.Width = 1280u;
+	descDepth.Height = 720u;
+	descDepth.MipLevels = 1u;
+	descDepth.ArraySize = 1u;
+	descDepth.Format = DXGI_FORMAT_D32_FLOAT;
+	descDepth.SampleDesc.Count = 1u;
+	descDepth.SampleDesc.Quality = 0u;
+	descDepth.Usage = D3D11_USAGE_DEFAULT;
+	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	
+	hr = m_Device->CreateTexture2D(&descDepth, nullptr, &pDepthStencil);
+	ASSERT(hr, "failed to create depth stencil buffer");
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC dsvd = {};
+	dsvd.Format = DXGI_FORMAT_D32_FLOAT;
+	dsvd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	dsvd.Texture2D.MipSlice = 0u;
+
+	hr = m_Device->CreateDepthStencilView(pDepthStencil.Get(), &dsvd, &m_DsView);
+	ASSERT(hr, "failed to create depth stencil view");
+
+	m_DevContext->OMSetRenderTargets(1u, m_RTView.GetAddressOf(), m_DsView.Get());
 }
 
 void Graphics::EndFrame()
@@ -59,24 +94,12 @@ void Graphics::ClearBuffer(float r, float g, float b) noexcept
 {
 	const float color[] = { r,g,b,1.0 };
 	m_DevContext->ClearRenderTargetView(m_RTView.Get(), color);
+	m_DevContext->ClearDepthStencilView(m_DsView.Get(), D3D11_CLEAR_DEPTH,1.0f, 0);
 }
 
 void Graphics::DrawTestTriangle(float angle, float x, float y, float color)
 {
-	HRESULT hr;
-
-	struct Vertex
-	{
-		struct
-		{
-			float x;
-			float y;
-			float z;
-		}pos;
-		
-	};
-
-	const Vertex vertices[] =
+	std::vector<Vertex> verticesvec =
 	{
 		{-1.0f, -1.0f,-1.0f},
 		{ 1.0f, -1.0f,-1.0f},
@@ -86,9 +109,9 @@ void Graphics::DrawTestTriangle(float angle, float x, float y, float color)
 		{ 1.0f, -1.0f, 1.0f},
 		{-1.0f,  1.0f, 1.0f},
 		{ 1.0f,  1.0f, 1.0f},
-
 	};
-	const unsigned short indices[] =
+	
+	std::vector<USHORT> indices =
 	{
 		0,2,1, 2,3,1,
 		1,3,5, 3,7,5,
@@ -97,6 +120,8 @@ void Graphics::DrawTestTriangle(float angle, float x, float y, float color)
 		0,4,2, 2,4,6,
 		0,1,4, 1,5,4
 	};
+
+	HRESULT hr;
 
 	struct ConstantBuffer
 	{
@@ -110,7 +135,7 @@ void Graphics::DrawTestTriangle(float angle, float x, float y, float color)
 			XMMatrixRotationZ(angle)*
 			XMMatrixRotationX(angle)*
 			XMMatrixTranslation(x, y, 4.0f)*
-			XMMatrixPerspectiveLH(1.0f, 0.5625f, 0.5f, 10.f)
+			XMMatrixPerspectiveLH(1.0f, 0.5625f, 0.25f, 10.f)
 			)
 			
 		}
@@ -130,45 +155,13 @@ void Graphics::DrawTestTriangle(float angle, float x, float y, float color)
 	hr = m_Device->CreateBuffer(&cbd, &csd, &pConstantBuffer);
 	ASSERT(hr, "Constant buffer creation failed!");
 
-	using namespace Microsoft::WRL;
-	ComPtr<ID3D11Buffer> pVertexBuffer;
-
-	D3D11_BUFFER_DESC vDesc = {};
-	vDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vDesc.Usage = D3D11_USAGE_DEFAULT;
-	vDesc.CPUAccessFlags = 0u;
-	vDesc.MiscFlags = 0u;
-	vDesc.ByteWidth = sizeof(vertices);
-	vDesc.StructureByteStride = sizeof(Vertex);
-
-	D3D11_SUBRESOURCE_DATA sd = {};
-	sd.pSysMem = vertices;
-
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0u;
-
-	hr = m_Device->CreateBuffer(&vDesc, &sd, &pVertexBuffer);
-	ASSERT(hr, "create vertex buffer");
-
+	VertexBuffer vb(verticesvec);
+	vb.CreateBuffer(*this);
+	vb.Bind(*this);
 	
-	m_DevContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
-
-	
-
-	ComPtr<ID3D11Buffer> pIndexBuffer;
-	D3D11_BUFFER_DESC ibd = {};
-	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	ibd.Usage = D3D11_USAGE_DEFAULT;
-	ibd.CPUAccessFlags = 0u;
-	ibd.MiscFlags = 0u;
-	ibd.ByteWidth = sizeof(indices);
-	ibd.StructureByteStride = sizeof(unsigned short);
-	D3D11_SUBRESOURCE_DATA isd = {};
-	isd.pSysMem = indices;
-	hr = m_Device->CreateBuffer(&ibd, &isd, &pIndexBuffer);
-	ASSERT(hr, "creating index buffer failed");
-
-	m_DevContext->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+	IndexBuffer ib(indices);
+	ib.CreateBuffer(*this);
+	ib.Bind(*this);
 
 	ComPtr<ID3DBlob> pBlob;
 
@@ -242,9 +235,7 @@ void Graphics::DrawTestTriangle(float angle, float x, float y, float color)
 	m_Device->CreateInputLayout(ied, (UINT)std::size(ied), pBlob->GetBufferPointer(), pBlob->GetBufferSize(), &pInputLayout);
 	m_DevContext->IASetInputLayout(pInputLayout.Get());
 
-	//bind render targets
-	m_DevContext->OMSetRenderTargets(1u, m_RTView.GetAddressOf(), nullptr);
-
+	
 	m_DevContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	D3D11_VIEWPORT vp;
@@ -257,5 +248,15 @@ void Graphics::DrawTestTriangle(float angle, float x, float y, float color)
 	m_DevContext->RSSetViewports(1, &vp);
 
 
-	m_DevContext->DrawIndexed((UINT)std::size(indices), 0u, 0u);
+	m_DevContext->DrawIndexed(ib.GetSize(), 0u, 0u);
+}
+
+ID3D11Device* Graphics::GetDevice() const
+{
+	return m_Device.Get();
+}
+
+ID3D11DeviceContext* Graphics::GetContext() const
+{
+	return m_DevContext.Get();
 }
