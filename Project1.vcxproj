@@ -153,6 +153,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source Files\shader.cpp" />
     <ClCompile Include="Source Files\timer.cpp" />
     <ClCompile Include="Source Files\window.cpp" />
   </ItemGroup>
@@ -165,6 +166,7 @@
     <ClInclude Include="Source Files\Headers\graphics.h" />
     <ClInclude Include="Source Files\Headers\keyboard.h" />
     <ClInclude Include="Source Files\Headers\Mouse.h" />
+    <ClInclude Include="Source Files\Headers\shader.h" />
     <ClInclude Include="Source Files\Headers\window.h" />
     <ClInclude Include="Source Files\Headers\winh.h" />
     <ClInclude Include="Source Files\Headers\pch.h" />

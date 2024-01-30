@@ -7,7 +7,7 @@
 class Buffer
 {
 public:
-	virtual void Bind(const Graphics& gfx) = 0;
+	virtual void Bind(const Graphics& gfx) const  = 0;
 	virtual void CreateBuffer(const Graphics& gfx) = 0;
 public:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> m_pBuffer;

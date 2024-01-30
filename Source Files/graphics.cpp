@@ -2,6 +2,7 @@
 #include "Headers/graphics.h"
 #include "Headers/asserts.h"
 #include "Headers/Rendering/buffers.h"
+#include "Headers/shader.h"
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 
@@ -155,15 +156,8 @@ void Graphics::DrawTestTriangle(float angle, float x, float y, float color)
 	hr = m_Device->CreateBuffer(&cbd, &csd, &pConstantBuffer);
 	ASSERT(hr, "Constant buffer creation failed!");
 
-	VertexBuffer vb(verticesvec);
-	vb.CreateBuffer(*this);
-	vb.Bind(*this);
-	
-	IndexBuffer ib(indices);
-	ib.CreateBuffer(*this);
-	ib.Bind(*this);
-
-	ComPtr<ID3DBlob> pBlob;
+	VertexBuffer vb(verticesvec, this);
+	IndexBuffer ib(indices, this);
 
 	struct ConstantBuffer2
 	{
@@ -200,24 +194,11 @@ void Graphics::DrawTestTriangle(float angle, float x, float y, float color)
 	hr = m_Device->CreateBuffer(&cbd2, &cb2r, pConstantBuffer2.GetAddressOf());
 	ASSERT(hr, "failed to create constant buffer 2!");
 
-	ComPtr<ID3D11PixelShader> pPixelShader;
-	hr = D3DReadFileToBlob(L"PixelShader.cso", &pBlob);
-	ASSERT(hr, "reading pixel shader to blob");
-	hr = m_Device->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pPixelShader);
-	ASSERT(hr, "Pixel shader creation failed!");
-	//bind pixel shader!
-	m_DevContext->PSSetShader(pPixelShader.Get(), 0, 0);
-
-	m_DevContext->PSSetConstantBuffers(0u, 1u, pConstantBuffer2.GetAddressOf());
+	extern ComPtr<ID3DBlob> pBlob;
+	PixelShader ps(L"PixelShader.cso", this);
+	VertexShader vs(L"VertexShader.cso", this);
 	
-	ComPtr<ID3D11VertexShader> pVertexShader;
-	hr = D3DReadFileToBlob(L"VertexShader.cso", &pBlob);
-	ASSERT(hr, "readfile to blob - vertex shader");
-	hr = m_Device->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pVertexShader);
-	ASSERT(hr, "Vertex shader creation failed!");
-	//bind vertex shader
-	m_DevContext->VSSetShader(pVertexShader.Get(), 0, 0);
-
+	m_DevContext->PSSetConstantBuffers(0u, 1u, pConstantBuffer2.GetAddressOf());
 	
 	//bind our constants
 	m_DevContext->VSSetConstantBuffers(0, 1u, pConstantBuffer.GetAddressOf());
@@ -231,6 +212,7 @@ void Graphics::DrawTestTriangle(float angle, float x, float y, float color)
 	{
 		{"Position", 0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0},
 	};
+
 
 	m_Device->CreateInputLayout(ied, (UINT)std::size(ied), pBlob->GetBufferPointer(), pBlob->GetBufferSize(), &pInputLayout);
 	m_DevContext->IASetInputLayout(pInputLayout.Get());
