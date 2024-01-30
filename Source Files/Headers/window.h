@@ -3,7 +3,7 @@
 #include "d3dexception.h"
 #include "keyboard.h"
 #include "Mouse.h"
-#include "graphics.h"
+#include "Rendering/graphics.h"
 
 namespace GameCore
 {

@@ -1,19 +1,19 @@
 #pragma once
-#include "pch.h"
-#include "timer.h"
-#include "d3dexception.h"
+#include "../pch.h"
+#include "../timer.h"
+#include "../d3dexception.h"
 
 class Graphics : public NonCopyable
 {
+	friend class Bindable;
 public:
 	Graphics(HWND);
 	~Graphics() = default;
 	void EndFrame();
 	void ClearBuffer(float r, float g, float b) noexcept;
 	void DrawTestTriangle(float angle,float x,float y, float col);
+	void DrawIndexed(UINT indexCount);
 
-	ID3D11Device* GetDevice() const;
-	ID3D11DeviceContext* GetContext() const;
 
 private:
 	Microsoft::WRL::ComPtr<ID3D11Device> m_Device;

@@ -1,8 +1,11 @@
 #include "Headers/pch.h"
-#include "Headers/graphics.h"
+#include "Headers/Rendering/graphics.h"
 #include "Headers/asserts.h"
 #include "Headers/Rendering/buffers.h"
-#include "Headers/shader.h"
+#include "Headers/Rendering/indexbuffer.h"
+#include "Headers/Rendering/shader.h"
+#include "Headers/Rendering/inputlayout.h"
+#include "Headers/Rendering/topology.h"
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 
@@ -10,6 +13,33 @@
 
 using namespace Microsoft::WRL;
 using namespace DirectX;
+
+struct Vertex
+{
+	struct
+	{
+		float x;
+		float y;
+		float z;
+	}pos;
+
+};
+
+struct ConstantBuffer
+{
+	DirectX::XMMATRIX transform;
+};
+
+struct ConstantBuffer2
+{
+	struct
+	{
+		float r;
+		float g;
+		float b;
+		float a;
+	}face_colors[6];
+};
 
 
 Graphics::Graphics(HWND hWnd)
@@ -84,6 +114,16 @@ Graphics::Graphics(HWND hWnd)
 	ASSERT(hr, "failed to create depth stencil view");
 
 	m_DevContext->OMSetRenderTargets(1u, m_RTView.GetAddressOf(), m_DsView.Get());
+
+	D3D11_VIEWPORT vp;
+	vp.Width = 1280;
+	vp.Height = 720;
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	vp.TopLeftX = 0.0f;
+	vp.TopLeftY = 0.0f;
+	m_DevContext->RSSetViewports(1, &vp);
+
 }
 
 void Graphics::EndFrame()
@@ -98,6 +138,11 @@ void Graphics::ClearBuffer(float r, float g, float b) noexcept
 	m_DevContext->ClearDepthStencilView(m_DsView.Get(), D3D11_CLEAR_DEPTH,1.0f, 0);
 }
 
+
+void Graphics::DrawIndexed(UINT indexCount)
+{
+	m_DevContext->DrawIndexed(indexCount, 0u, 0);
+}
 void Graphics::DrawTestTriangle(float angle, float x, float y, float color)
 {
 	std::vector<Vertex> verticesvec =
@@ -122,20 +167,13 @@ void Graphics::DrawTestTriangle(float angle, float x, float y, float color)
 		0,1,4, 1,5,4
 	};
 
-	HRESULT hr;
-
-	struct ConstantBuffer
-	{
-		XMMATRIX transform;
-	};
-
-	const ConstantBuffer cb =
+	ConstantBuffer cb =
 	{
 		{
 			XMMatrixTranspose(
 			XMMatrixRotationZ(angle)*
 			XMMatrixRotationX(angle)*
-			XMMatrixTranslation(x, y, 4.0f)*
+			XMMatrixTranslation(x, y, 5.0f)*
 			XMMatrixPerspectiveLH(1.0f, 0.5625f, 0.25f, 10.f)
 			)
 			
@@ -143,33 +181,11 @@ void Graphics::DrawTestTriangle(float angle, float x, float y, float color)
 	};
 
 
-	ComPtr<ID3D11Buffer> pConstantBuffer;
-	D3D11_BUFFER_DESC cbd;
-	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cbd.Usage = D3D11_USAGE_DYNAMIC;
-	cbd.ByteWidth = sizeof(cb);
-	cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	cbd.MiscFlags = 0u;
-	cbd.StructureByteStride = 0u;
-	D3D11_SUBRESOURCE_DATA csd = {};
-	csd.pSysMem = &cb;
-	hr = m_Device->CreateBuffer(&cbd, &csd, &pConstantBuffer);
-	ASSERT(hr, "Constant buffer creation failed!");
+	TransConstantBuffer vcb(cb, *this);
+	VertexBuffer vb(verticesvec, *this);
+	IndexBuffer ib(indices, *this);
 
-	VertexBuffer vb(verticesvec, this);
-	IndexBuffer ib(indices, this);
-
-	struct ConstantBuffer2
-	{
-		struct
-		{
-			float r;
-			float g;
-			float b;
-			float a;
-		}face_colors[6];
-	};
-	const ConstantBuffer2 cb2
+	ConstantBuffer2 cb2
 	{
 		{
 			{1.0f,0.0f,1.0f},
@@ -180,65 +196,22 @@ void Graphics::DrawTestTriangle(float angle, float x, float y, float color)
 			{0.0f,1.0f,1.0f},
 		}
 	};
-	ComPtr<ID3D11Buffer> pConstantBuffer2;
-	D3D11_BUFFER_DESC cbd2 = {};
-	cbd2.ByteWidth = sizeof(cb2);
-	cbd2.Usage = D3D11_USAGE_DYNAMIC;
-	cbd2.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cbd2.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	cbd2.MiscFlags = 0u;
-	cbd2.StructureByteStride = 0u;
-	D3D11_SUBRESOURCE_DATA cb2r;
-	cb2r.pSysMem = &cb2;
 
-	hr = m_Device->CreateBuffer(&cbd2, &cb2r, pConstantBuffer2.GetAddressOf());
-	ASSERT(hr, "failed to create constant buffer 2!");
-
+	ConstBuffer pcb(cb2, *this);
 	extern ComPtr<ID3DBlob> pBlob;
-	PixelShader ps(L"PixelShader.cso", this);
-	VertexShader vs(L"VertexShader.cso", this);
+	PixelShader ps(L"PixelShader.cso", *this);
+	VertexShader vs(L"VertexShader.cso", *this);
 	
-	m_DevContext->PSSetConstantBuffers(0u, 1u, pConstantBuffer2.GetAddressOf());
-	
-	//bind our constants
-	m_DevContext->VSSetConstantBuffers(0, 1u, pConstantBuffer.GetAddressOf());
-
-	
-
-
 	//input (vertex) layout
-	ComPtr<ID3D11InputLayout> pInputLayout;
-	const D3D11_INPUT_ELEMENT_DESC ied[] =
+	std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 	{
 		{"Position", 0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0},
 	};
 
+	InputLayout il(ied, *this);
 
-	m_Device->CreateInputLayout(ied, (UINT)std::size(ied), pBlob->GetBufferPointer(), pBlob->GetBufferSize(), &pInputLayout);
-	m_DevContext->IASetInputLayout(pInputLayout.Get());
-
+	Topology tp(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, *this);
 	
-	m_DevContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	D3D11_VIEWPORT vp;
-	vp.Width = 1280;
-	vp.Height = 720;
-	vp.MinDepth = 0.0f;
-	vp.MaxDepth = 1.0f;
-	vp.TopLeftX = 0.0f;
-	vp.TopLeftY = 0.0f;
-	m_DevContext->RSSetViewports(1, &vp);
-
 
 	m_DevContext->DrawIndexed(ib.GetSize(), 0u, 0u);
-}
-
-ID3D11Device* Graphics::GetDevice() const
-{
-	return m_Device.Get();
-}
-
-ID3D11DeviceContext* Graphics::GetContext() const
-{
-	return m_DevContext.Get();
 }
