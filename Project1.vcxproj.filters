@@ -63,9 +63,6 @@
     <ClCompile Include="Source Files\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\bindable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source Files\inputlayout.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

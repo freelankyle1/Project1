@@ -11,15 +11,13 @@
 //we need to allocate all of the bindables on the heap using unique_ptr
 
 App::App()
-	: m_Wnd(1280,720,"Kyles dungeon")
+	: m_Wnd(SCREEN_WIDTH,SCREEN_HEIGHT,"Kyles dungeon")
 {
-	for (int i = 0; i < 5; i++)
-	{
+	for (int i =0; i < 5; i++)
 		Boxes.push_back(std::make_unique<Box>(m_Wnd.Gfx()));
-	}
 	float fFov = 90.f;
 	float fFovRad = 1.0f / tanf(fFov * 0.5 / 180.0f * 3.14159f);
-	m_Wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveFovLH(fFovRad, 1280.0f/720.0f, 0.1f, 1000.0f));
+	m_Wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, (float)SCREEN_HEIGHT / (float)SCREEN_WIDTH, 0.25f, 100.0f));
 	
 }
 

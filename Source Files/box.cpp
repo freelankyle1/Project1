@@ -10,6 +10,9 @@
 #include "Headers/Rendering/topology.h"
 #include <random>
 
+UINT Box::m_IndexCount;
+bool Box::StaticInit;
+
 
 Box::Box(Graphics& gfx)
 {
@@ -26,82 +29,79 @@ Box::Box(Graphics& gfx)
 
 	std::random_device rd2;
 	std::mt19937 mt2(rd2());
-	std::uniform_real_distribution<float> distribution2(-10.0f, 10.0f);
+	std::uniform_real_distribution<float> distribution2(-5.0f, 5.0f);
 
 	randTranslationX = distribution2(mt2);
 
 	using namespace DirectX;
 
-	std::vector<Vertex> vertices =
+	if (!StaticInit)
 	{
-		{-1.0f, -1.0f,-1.0f},
-		{ 1.0f, -1.0f,-1.0f},
-		{-1.0f,  1.0f,-1.0f},
-		{ 1.0f,  1.0f,-1.0f},
-		{-1.0f, -1.0f, 1.0f},
-		{ 1.0f, -1.0f, 1.0f},
-		{-1.0f,  1.0f, 1.0f},
-		{ 1.0f,  1.0f, 1.0f},
-	};
 
-	//VertexBuffer vb(gfx, vertices);
-
-
-	AddBind(std::make_shared<VertexBuffer>(gfx, vertices));
-
-	//VertexShader vs(L"VertexShader.cso", gfx);
-	
-	auto pvs = std::make_shared<VertexShader>(gfx, L"VertexShader.cso");
-	auto pvsbc = pvs->GetByteCode();
-	AddBind(std::move(pvs));
-	
-	//PixelShader ps(L"PixelShader.cso", gfx);
-	AddBind(std::make_shared<PixelShader>(gfx, L"PixelShader.cso"));
-
-	std::vector<USHORT> indices =
-	{
-		0,2,1, 2,3,1,
-		1,3,5, 3,7,5,
-		2,6,3, 3,6,7,
-		4,5,7, 4,7,6,
-		0,4,2, 2,4,6,
-		0,1,4, 1,5,4
-	};
-
-	//IndexBuffer ib(gfx, indices);
-	AddIndexBuffer(std::make_shared<IndexBuffer>(gfx, indices));
-
-	ConstantBuffer2 cb2
-	{
+		std::vector<Vertex> vertices =
 		{
-			{1.0f,0.0f,1.0f},
-			{1.0f,0.0f,0.0f},
-			{0.0f,1.0f,0.0f},
-			{0.0f,0.0f,1.0f},
-			{1.0f,1.0f,0.0f},
-			{0.0f,1.0f,1.0f},
-		}
-	};
+			{-1.0f, -1.0f,-1.0f},
+			{ 1.0f, -1.0f,-1.0f},
+			{-1.0f,  1.0f,-1.0f},
+			{ 1.0f,  1.0f,-1.0f},
+			{-1.0f, -1.0f, 1.0f},
+			{ 1.0f, -1.0f, 1.0f},
+			{-1.0f,  1.0f, 1.0f},
+			{ 1.0f,  1.0f, 1.0f},
+		};
 
-	//PixelConstant pcbuffer(gfx, cb2);
-	AddBind(std::make_shared<PixelConstant>(gfx, cb2));
 
-	std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
-	{
-		{"Position", 0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0}
-	};
+		AddBind(std::make_shared<VertexBuffer>(gfx, vertices));
 
-	//InputLayout il(gfx, ied, pvsbc);
-	AddBind(std::make_shared<InputLayout>(gfx, ied, pvsbc));
 
-	//Topology tp(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	AddBind(std::make_shared<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+		auto pvs = std::make_shared<VertexShader>(gfx, L"VertexShader.cso");
+		auto pvsbc = pvs->GetByteCode();
+		AddBind(std::move(pvs));
 
-	m_cb.transform *= gfx.GetProjection();
+		AddBind(std::make_shared<PixelShader>(gfx, L"PixelShader.cso"));
+
+		std::vector<USHORT> indices =
+		{
+			0,2,1, 2,3,1,
+			1,3,5, 3,7,5,
+			2,6,3, 3,6,7,
+			4,5,7, 4,7,6,
+			0,4,2, 2,4,6,
+			0,1,4, 1,5,4
+		};
+
+		AddIndexBuffer(std::make_shared<IndexBuffer>(gfx, indices));
+
+		ConstantBuffer2 cb2
+		{
+			{
+				{1.0f,0.0f,1.0f},
+				{1.0f,0.0f,0.0f},
+				{0.0f,1.0f,0.0f},
+				{0.0f,0.0f,1.0f},
+				{1.0f,1.0f,0.0f},
+				{0.0f,1.0f,1.0f},
+			}
+		};
+
+		AddBind(std::make_shared<PixelConstant>(gfx, cb2));
+
+		std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
+		{
+			{"Position", 0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0}
+		};
+
+		AddBind(std::make_shared<InputLayout>(gfx, ied, pvsbc));
+
+		AddBind(std::make_shared<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+	}
+
 
 	std::shared_ptr vcb = std::make_shared<VertexConstant>(gfx, m_cb);
 	vcbuffer = vcb.get();
 	AddBind(std::move(vcb));
+
+	StaticInit = true;
 }
 
 void Box::AddBind(std::shared_ptr<Bindable> bind)
@@ -129,8 +129,9 @@ DirectX::XMMATRIX Box::GetTransform(Graphics& gfx)
 {
 	using namespace DirectX;
 	return	XMMatrixRotationZ(0) *
-			XMMatrixRotationX(rotationX) *
-			XMMatrixTranslation(randTranslationX, 0.0f, 15.0f);
+			XMMatrixRotationY(rotationX)*
+			XMMatrixRotationX(0.0) *
+			XMMatrixTranslation(randTranslationX, 0.0f, 5.0f);
 }
 
 void Box::Update(Graphics& gfx, float dt)

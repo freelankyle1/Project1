@@ -66,8 +66,8 @@ Graphics::Graphics(HWND hWnd)
 
 	ComPtr<ID3D11Texture2D> pDepthStencil;
 	D3D11_TEXTURE2D_DESC descDepth = {};
-	descDepth.Width = 1280u;
-	descDepth.Height = 720u;
+	descDepth.Width = (UINT)SCREEN_WIDTH;
+	descDepth.Height = (UINT)SCREEN_HEIGHT;
 	descDepth.MipLevels = 1u;
 	descDepth.ArraySize = 1u;
 	descDepth.Format = DXGI_FORMAT_D32_FLOAT;
@@ -90,8 +90,8 @@ Graphics::Graphics(HWND hWnd)
 	m_DevContext->OMSetRenderTargets(1u, m_RTView.GetAddressOf(), m_DsView.Get());
 
 	D3D11_VIEWPORT vp;
-	vp.Width = 1280;
-	vp.Height = 720;
+	vp.Width = SCREEN_WIDTH;
+	vp.Height = SCREEN_HEIGHT;
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0.0f;

@@ -143,7 +143,6 @@
   <ItemGroup>
     <ClCompile Include="Source Files\app.cpp" />
     <ClCompile Include="Source Files\asserts.cpp" />
-    <ClCompile Include="Source Files\bindable.cpp" />
     <ClCompile Include="Source Files\box.cpp" />
     <ClCompile Include="Source Files\d3dexception.cpp" />
     <ClCompile Include="Source Files\graphics.cpp" />

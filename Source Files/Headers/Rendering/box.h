@@ -23,18 +23,19 @@ private:
 	float rotationZ;
 	float randTranslationX;
 
-	UINT m_IndexCount;
+	static UINT m_IndexCount;
+	static bool StaticInit;
 
 	//VertexConstant* vertexRef;
 	ConstantBuffer m_cb = {
 		DirectX::XMMatrixRotationZ(0.0f)*
 		DirectX::XMMatrixRotationX(0.0f)*
-		DirectX::XMMatrixTranslation(randTranslationX, 0.0f, 0.0f)
+		DirectX::XMMatrixRotationY(0.0f)*
+		DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f)
 	};
 	VertexConstant* vcbuffer;
 
 	std::vector<std::shared_ptr<Bindable>> Binds;
-	ID3D11Buffer* p_IndexBuffer;
-
 
 };
+

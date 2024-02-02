@@ -19,6 +19,8 @@ VertexShader::VertexShader(Graphics& gfx, const std::wstring& filepath)
 	hr = gfx.m_Device->CreateVertexShader(m_pBlob->GetBufferPointer(), m_pBlob->GetBufferSize(), nullptr, &m_pVertexShader);
 	ASSERT(hr, "Vertex shader creation failed!");
 
+	ASSERT_INFO(filepath.c_str());
+
 }
 
 void VertexShader::Bind(Graphics& gfx)
