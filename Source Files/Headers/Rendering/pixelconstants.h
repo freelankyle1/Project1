@@ -1,18 +1,16 @@
 #pragma once
 #include "../pch.h"
-#include "../asserts.h"
 #include "graphics.h"
+#include "globals.h"
 #include "bindable.h"
+#include <DirectXMath.h>
 
-class IndexBuffer : public Bindable
+class PixelConstant : public Bindable
 {
 public:
-	IndexBuffer(Graphics& gfx, std::vector<USHORT>& buffer);
+	PixelConstant(Graphics& gfx, ConstantBuffer2& constBuffer);
 	void Bind(Graphics& gfx) override;
-	UINT GetSize() const;
 
 private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> m_pBuffer;
-	UINT count;
-	
 };

@@ -1,11 +1,12 @@
 #include "Headers/pch.h"
-#include "Headers/Rendering/graphics.h"
 #include "Headers/asserts.h"
-#include "Headers/Rendering/buffers.h"
+#include "Headers/Rendering/graphics.h"
+#include "Headers/Rendering/vertexbuffer.h"
 #include "Headers/Rendering/indexbuffer.h"
 #include "Headers/Rendering/shader.h"
 #include "Headers/Rendering/inputlayout.h"
 #include "Headers/Rendering/topology.h"
+#include "Headers/Rendering/globals.h"
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 
@@ -13,33 +14,6 @@
 
 using namespace Microsoft::WRL;
 using namespace DirectX;
-
-struct Vertex
-{
-	struct
-	{
-		float x;
-		float y;
-		float z;
-	}pos;
-
-};
-
-struct ConstantBuffer
-{
-	DirectX::XMMATRIX transform;
-};
-
-struct ConstantBuffer2
-{
-	struct
-	{
-		float r;
-		float g;
-		float b;
-		float a;
-	}face_colors[6];
-};
 
 
 Graphics::Graphics(HWND hWnd)
@@ -138,80 +112,17 @@ void Graphics::ClearBuffer(float r, float g, float b) noexcept
 	m_DevContext->ClearDepthStencilView(m_DsView.Get(), D3D11_CLEAR_DEPTH,1.0f, 0);
 }
 
-
 void Graphics::DrawIndexed(UINT indexCount)
 {
 	m_DevContext->DrawIndexed(indexCount, 0u, 0);
 }
-void Graphics::DrawTestTriangle(float angle, float x, float y, float color)
+
+void Graphics::SetProjection(DirectX::XMMATRIX proj)
 {
-	std::vector<Vertex> verticesvec =
-	{
-		{-1.0f, -1.0f,-1.0f},
-		{ 1.0f, -1.0f,-1.0f},
-		{-1.0f,  1.0f,-1.0f},
-		{ 1.0f,  1.0f,-1.0f},
-		{-1.0f, -1.0f, 1.0f},
-		{ 1.0f, -1.0f, 1.0f},
-		{-1.0f,  1.0f, 1.0f},
-		{ 1.0f,  1.0f, 1.0f},
-	};
-	
-	std::vector<USHORT> indices =
-	{
-		0,2,1, 2,3,1,
-		1,3,5, 3,7,5,
-		2,6,3, 3,6,7,
-		4,5,7, 4,7,6,
-		0,4,2, 2,4,6,
-		0,1,4, 1,5,4
-	};
+	projection = proj;
+}
 
-	ConstantBuffer cb =
-	{
-		{
-			XMMatrixTranspose(
-			XMMatrixRotationZ(angle)*
-			XMMatrixRotationX(angle)*
-			XMMatrixTranslation(x, y, 5.0f)*
-			XMMatrixPerspectiveLH(1.0f, 0.5625f, 0.25f, 10.f)
-			)
-			
-		}
-	};
-
-
-	TransConstantBuffer vcb(cb, *this);
-	VertexBuffer vb(verticesvec, *this);
-	IndexBuffer ib(indices, *this);
-
-	ConstantBuffer2 cb2
-	{
-		{
-			{1.0f,0.0f,1.0f},
-			{1.0f,0.0f,0.0f},
-			{0.0f,1.0f,0.0f},
-			{0.0f,0.0f,1.0f},
-			{1.0f,1.0f,0.0f},
-			{0.0f,1.0f,1.0f},
-		}
-	};
-
-	ConstBuffer pcb(cb2, *this);
-	extern ComPtr<ID3DBlob> pBlob;
-	PixelShader ps(L"PixelShader.cso", *this);
-	VertexShader vs(L"VertexShader.cso", *this);
-	
-	//input (vertex) layout
-	std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
-	{
-		{"Position", 0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0},
-	};
-
-	InputLayout il(ied, *this);
-
-	Topology tp(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, *this);
-	
-
-	m_DevContext->DrawIndexed(ib.GetSize(), 0u, 0u);
+DirectX::XMMATRIX Graphics::GetProjection() const
+{
+	return projection;
 }

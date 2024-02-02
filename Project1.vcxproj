@@ -144,9 +144,9 @@
     <ClCompile Include="Source Files\app.cpp" />
     <ClCompile Include="Source Files\asserts.cpp" />
     <ClCompile Include="Source Files\bindable.cpp" />
+    <ClCompile Include="Source Files\box.cpp" />
     <ClCompile Include="Source Files\d3dexception.cpp" />
     <ClCompile Include="Source Files\graphics.cpp" />
-    <ClCompile Include="Source Files\drawable.cpp" />
     <ClCompile Include="Source Files\indexbuffer.cpp" />
     <ClCompile Include="Source Files\inputlayout.cpp" />
     <ClCompile Include="Source Files\mouse.cpp" />
@@ -156,9 +156,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source Files\pixelconstants.cpp" />
     <ClCompile Include="Source Files\shader.cpp" />
     <ClCompile Include="Source Files\timer.cpp" />
     <ClCompile Include="Source Files\topology.cpp" />
+    <ClCompile Include="Source Files\vertexbuffer.cpp" />
+    <ClCompile Include="Source Files\vertexconstants.cpp" />
     <ClCompile Include="Source Files\window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -167,22 +170,27 @@
     <ClInclude Include="Source Files\Headers\d3dapp.h" />
     <ClInclude Include="Source Files\Headers\d3dexception.h" />
     <ClInclude Include="Source Files\Headers\Rendering\bindable.h" />
-    <ClInclude Include="Source Files\Headers\Rendering\drawable.h" />
+    <ClInclude Include="Source Files\Headers\Rendering\globals.h" />
+    <ClInclude Include="Source Files\Headers\Rendering\box.h" />
     <ClInclude Include="Source Files\Headers\Rendering\graphics.h" />
     <ClInclude Include="Source Files\Headers\keyboard.h" />
     <ClInclude Include="Source Files\Headers\Mouse.h" />
     <ClInclude Include="Source Files\Headers\Rendering\indexbuffer.h" />
     <ClInclude Include="Source Files\Headers\Rendering\inputlayout.h" />
+    <ClInclude Include="Source Files\Headers\Rendering\pixelconstants.h" />
     <ClInclude Include="Source Files\Headers\Rendering\shader.h" />
     <ClInclude Include="Source Files\Headers\Rendering\topology.h" />
+    <ClInclude Include="Source Files\Headers\Rendering\vertexconstants.h" />
     <ClInclude Include="Source Files\Headers\window.h" />
     <ClInclude Include="Source Files\Headers\winh.h" />
     <ClInclude Include="Source Files\Headers\pch.h" />
     <ClInclude Include="Source Files\Headers\timer.h" />
-    <ClInclude Include="Source Files\Headers\Rendering\buffers.h" />
+    <ClInclude Include="Source Files\Headers\Rendering\vertexbuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="PixelShader.cso" />
+    <None Include="VertexShader.cso" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Source Files\Shaders\PixelShader.hlsl">

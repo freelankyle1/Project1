@@ -2,6 +2,8 @@
 #include "pch.h"
 #include "window.h"
 #include "timer.h"
+#include "Rendering/box.h"
+
 
 class App
 {
@@ -15,6 +17,7 @@ private:
 
 private:
 	window m_Wnd;
+	std::vector<std::unique_ptr<class Box>> Boxes;
 	
 //check timer.h for this define
 #ifdef WINDOWS_TIMER

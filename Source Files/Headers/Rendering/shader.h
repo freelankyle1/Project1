@@ -7,30 +7,24 @@ class Graphics;
 class VertexShader : public Bindable
 {
 public:
-	VertexShader(const std::wstring& filepath, Graphics& gfx);
-	~VertexShader() = default;
-
-private:
-	void Bind(Graphics& gfx) const override;
-	void CompileShader(Graphics& gfx);
+	VertexShader(Graphics& gfx, const std::wstring& filepath);
+	void Bind(Graphics& gfx) override;
+	ID3DBlob* GetByteCode() const;
 
 private:
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> m_pVertexShader;
 	LPCWSTR m_Filepath;
+	Microsoft::WRL::ComPtr<ID3DBlob> m_pBlob;
 
 };
 
 class PixelShader : public Bindable
 {
 public:
-	PixelShader(const std::wstring& filepath, Graphics& gfx);
-	~PixelShader() = default;
-private:
-	void Bind(Graphics& gfx) const override;
-	void CompileShader(Graphics& gfx);
+	PixelShader(Graphics& gfx, const std::wstring& filepath);
+	void Bind(Graphics& gfx) override;
 
 private:
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> m_pPixelShader;
 	LPCWSTR m_Filepath;
-	const Graphics* m_gfx;
 };

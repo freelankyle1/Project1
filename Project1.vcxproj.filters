@@ -72,10 +72,19 @@
     <ClCompile Include="Source Files\topology.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\drawable.cpp">
+    <ClCompile Include="Source Files\indexbuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\indexbuffer.cpp">
+    <ClCompile Include="Source Files\box.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\vertexbuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\pixelconstants.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\vertexconstants.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -113,13 +122,10 @@
     <ClInclude Include="Source Files\Headers\asserts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source Files\Headers\Rendering\buffers.h">
+    <ClInclude Include="Source Files\Headers\Rendering\vertexbuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source Files\Headers\Rendering\shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source Files\Headers\Rendering\bindable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source Files\Headers\Rendering\inputlayout.h">
@@ -128,15 +134,29 @@
     <ClInclude Include="Source Files\Headers\Rendering\topology.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source Files\Headers\Rendering\drawable.h">
+    <ClInclude Include="Source Files\Headers\Rendering\indexbuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source Files\Headers\Rendering\indexbuffer.h">
+    <ClInclude Include="Source Files\Headers\Rendering\box.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source Files\Headers\Rendering\globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source Files\Headers\Rendering\pixelconstants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source Files\Headers\Rendering\vertexconstants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source Files\Headers\Rendering\bindable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="PixelShader.cso" />
+    <None Include="VertexShader.cso" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Source Files\Shaders\VertexShader.hlsl" />

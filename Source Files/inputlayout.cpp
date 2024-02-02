@@ -1,22 +1,17 @@
 #include "Headers/pch.h"
 #include "Headers/Rendering/inputlayout.h"
 
-extern Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
 
-InputLayout::InputLayout(std::vector<D3D11_INPUT_ELEMENT_DESC>& input, Graphics& gfx)
+InputLayout::InputLayout(Graphics& gfx, const std::vector<D3D11_INPUT_ELEMENT_DESC>& input, ID3DBlob* bc)
 {
-	CreateInputLayout(input, gfx);
-	Bind(gfx);
-}
 
-void InputLayout::CreateInputLayout(const std::vector<D3D11_INPUT_ELEMENT_DESC>& input, Graphics& gfx)
-{
 	HRESULT hr;
-	hr = GetDevice(gfx)->CreateInputLayout(&input[0], (UINT)input.size(), pBlob->GetBufferPointer(), pBlob->GetBufferSize(), &m_pInputLayout);
+	hr = gfx.m_Device->CreateInputLayout(input.data(), input.size(), bc->GetBufferPointer(), bc->GetBufferSize(), &m_pInputLayout);
 	ASSERT(hr, "failed to create input layout!");
+
 }
 
-void InputLayout::Bind(Graphics& gfx) const
+void InputLayout::Bind(Graphics& gfx)
 {
-	GetContext(gfx)->IASetInputLayout(m_pInputLayout.Get());
+	gfx.m_DevContext->IASetInputLayout(m_pInputLayout.Get());
 }

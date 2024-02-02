@@ -1,13 +1,11 @@
 #include "Headers/pch.h"
 #include "Headers/Rendering/topology.h"
 
-Topology::Topology(D3D11_PRIMITIVE_TOPOLOGY tp, Graphics& gfx)
+Topology::Topology(Graphics& gfx, D3D11_PRIMITIVE_TOPOLOGY tp)
 	:m_tp(tp)
-{
-	Bind(gfx);
-}
+{}
 
-void Topology::Bind(Graphics& gfx) const
+void Topology::Bind(Graphics& gfx)
 {
-	GetContext(gfx)->IASetPrimitiveTopology(m_tp);
+	gfx.m_DevContext->IASetPrimitiveTopology(m_tp);
 }
