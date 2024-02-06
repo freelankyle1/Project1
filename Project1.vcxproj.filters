@@ -84,6 +84,9 @@
     <ClCompile Include="Source Files\vertexconstants.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\triangle2d.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source Files\Headers\window.h">
@@ -147,6 +150,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source Files\Headers\Rendering\bindable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source Files\Headers\Rendering\renderable2d.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source Files\Headers\Rendering\triangle2d.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

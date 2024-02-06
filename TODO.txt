@@ -1,0 +1,6 @@
+Rendering:
+ -Remove all the friends from the graphics class
+ -Turn the graphics class into a simple interface
+ -Implement the renderer2D class
+   *Add the rendering queue with Submit (renderable2D)
+   *Add the rending queue flush method

@@ -159,6 +159,7 @@
     <ClCompile Include="Source Files\shader.cpp" />
     <ClCompile Include="Source Files\timer.cpp" />
     <ClCompile Include="Source Files\topology.cpp" />
+    <ClCompile Include="Source Files\triangle2d.cpp" />
     <ClCompile Include="Source Files\vertexbuffer.cpp" />
     <ClCompile Include="Source Files\vertexconstants.cpp" />
     <ClCompile Include="Source Files\window.cpp" />
@@ -177,8 +178,10 @@
     <ClInclude Include="Source Files\Headers\Rendering\indexbuffer.h" />
     <ClInclude Include="Source Files\Headers\Rendering\inputlayout.h" />
     <ClInclude Include="Source Files\Headers\Rendering\pixelconstants.h" />
+    <ClInclude Include="Source Files\Headers\Rendering\renderable2d.h" />
     <ClInclude Include="Source Files\Headers\Rendering\shader.h" />
     <ClInclude Include="Source Files\Headers\Rendering\topology.h" />
+    <ClInclude Include="Source Files\Headers\Rendering\triangle2d.h" />
     <ClInclude Include="Source Files\Headers\Rendering\vertexconstants.h" />
     <ClInclude Include="Source Files\Headers\window.h" />
     <ClInclude Include="Source Files\Headers\winh.h" />

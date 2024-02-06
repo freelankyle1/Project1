@@ -3,6 +3,7 @@
 #include "Headers/timer.h"
 #include "Headers/Rendering/shader.h"
 #include "Headers/Rendering/box.h"
+#include "Headers/Rendering/triangle2d.h"
 #include <random>
 
 
@@ -13,10 +14,14 @@
 App::App()
 	: m_Wnd(SCREEN_WIDTH,SCREEN_HEIGHT,"Kyles dungeon")
 {
+	/*
 	for (int i =0; i < 5; i++)
 		Boxes.push_back(std::make_unique<Box>(m_Wnd.Gfx()));
 	float fFov = 90.f;
 	float fFovRad = 1.0f / tanf(fFov * 0.5 / 180.0f * 3.14159f);
+	*/
+	m_Renderables.push_back(std::make_unique<Triangle2D>(m_Wnd.Gfx()));
+
 	m_Wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, (float)SCREEN_HEIGHT / (float)SCREEN_WIDTH, 0.25f, 100.0f));
 	
 }
@@ -44,12 +49,20 @@ void App::DoFrame()
 	
 	m_Wnd.Gfx().ClearBuffer(0.0f, 0.0f, 0.0f);
 	
-	
+	for (const auto& it : m_Renderables)
+	{
+		it->Bind(m_Wnd.Gfx());
+		it->Update(m_Wnd.Gfx(), 0.0f);
+		m_Wnd.Gfx().DrawIndexed(it->GetIndexCount());
+	}
+
+	/*
 	for (const auto& it : Boxes)
 	{
 		it->Update(m_Wnd.Gfx(), currtime);
 		it->Draw(m_Wnd.Gfx());
 	}
+	*/
 	m_Wnd.Gfx().EndFrame();
 
 }
