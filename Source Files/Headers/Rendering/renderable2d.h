@@ -2,6 +2,7 @@
 
 #include "bindable.h"
 #include "graphics.h"
+#include "vertexconstants.h"
 
 class Renderable2D
 {

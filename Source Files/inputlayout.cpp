@@ -6,12 +6,12 @@ InputLayout::InputLayout(Graphics& gfx, const std::vector<D3D11_INPUT_ELEMENT_DE
 {
 
 	HRESULT hr;
-	hr = gfx.m_Device->CreateInputLayout(input.data(), input.size(), bc->GetBufferPointer(), bc->GetBufferSize(), &m_pInputLayout);
+	hr = gfx.GetDevice()->CreateInputLayout(input.data(), input.size(), bc->GetBufferPointer(), bc->GetBufferSize(), &m_pInputLayout);
 	ASSERT(hr, "failed to create input layout!");
 
 }
 
 void InputLayout::Bind(Graphics& gfx)
 {
-	gfx.m_DevContext->IASetInputLayout(m_pInputLayout.Get());
+	gfx.GetContext()->IASetInputLayout(m_pInputLayout.Get());
 }

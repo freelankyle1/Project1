@@ -16,14 +16,14 @@ VertexConstant::VertexConstant(Graphics& gfx,ConstantBuffer& constBuffer)
 	sr.pSysMem = &constBuffer;
 
 	HRESULT hr;
-	hr = gfx.m_Device->CreateBuffer(&bd, &sr, &m_pBuffer);
+	hr = gfx.GetDevice()->CreateBuffer(&bd, &sr, &m_pBuffer);
 	ASSERT(hr, "failed to create vertex constant buffer!");
 	
 }
 
 void VertexConstant::Bind(Graphics& gfx)
 {
-	gfx.m_DevContext->VSSetConstantBuffers(0u, 1u, m_pBuffer.GetAddressOf());
+	gfx.GetContext()->VSSetConstantBuffers(0u, 1u, m_pBuffer.GetAddressOf());
 }
 
 void VertexConstant::UpdateConstant(Graphics& gfx, ConstantBuffer& cb)
@@ -32,8 +32,8 @@ void VertexConstant::UpdateConstant(Graphics& gfx, ConstantBuffer& cb)
 	D3D11_MAPPED_SUBRESOURCE msr;
 
 
-	gfx.m_DevContext->Map(m_pBuffer.Get(), 0u, D3D11_MAP_WRITE_DISCARD, 0u, &msr);
+	gfx.GetContext()->Map(m_pBuffer.Get(), 0u, D3D11_MAP_WRITE_DISCARD, 0u, &msr);
 	memcpy(msr.pData, &cb, sizeof(cb));
-	gfx.m_DevContext->Unmap(m_pBuffer.Get(), 0u);
+	gfx.GetContext()->Unmap(m_pBuffer.Get(), 0u);
 	
 }

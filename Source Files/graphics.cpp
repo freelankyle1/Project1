@@ -127,11 +127,11 @@ DirectX::XMMATRIX Graphics::GetProjection() const
 	return projection;
 }
 
-const ID3D11Device* const Graphics::GetDevice() const
+ID3D11Device* Graphics::GetDevice() const
 {
 	return m_Device.Get();
 }
-const ID3D11DeviceContext* const Graphics::GetContext() const
+ID3D11DeviceContext* Graphics::GetContext() const
 {
 	return m_DevContext.Get();
 }

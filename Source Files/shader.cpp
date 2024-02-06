@@ -16,7 +16,7 @@ VertexShader::VertexShader(Graphics& gfx, const std::wstring& filepath)
 	ASSERT(hr, "readfile to blob - vertex shader");
 
 	
-	hr = gfx.m_Device->CreateVertexShader(m_pBlob->GetBufferPointer(), m_pBlob->GetBufferSize(), nullptr, &m_pVertexShader);
+	hr = gfx.GetDevice()->CreateVertexShader(m_pBlob->GetBufferPointer(), m_pBlob->GetBufferSize(), nullptr, &m_pVertexShader);
 	ASSERT(hr, "Vertex shader creation failed!");
 
 	ASSERT_INFO(filepath.c_str());
@@ -25,8 +25,7 @@ VertexShader::VertexShader(Graphics& gfx, const std::wstring& filepath)
 
 void VertexShader::Bind(Graphics& gfx)
 {
-	gfx.m_DevContext->VSSetShader(m_pVertexShader.Get(), 0, 0);
-
+	gfx.GetContext()->VSSetShader(m_pVertexShader.Get(), 0, 0);
 }
 
 ID3DBlob* VertexShader::GetByteCode() const
@@ -46,13 +45,13 @@ PixelShader::PixelShader(Graphics& gfx, const std::wstring& filepath)
 	hr = D3DReadFileToBlob(m_Filepath, &pBlob2);
 	ASSERT(hr, "failed to read pixel shader to blob!");
 
-	hr = gfx.m_Device->CreatePixelShader(pBlob2->GetBufferPointer(), pBlob2->GetBufferSize(), 0, &m_pPixelShader);
+	hr = gfx.GetDevice()->CreatePixelShader(pBlob2->GetBufferPointer(), pBlob2->GetBufferSize(), 0, &m_pPixelShader);
 	ASSERT(hr, "failed to create pixel shader!");
 
 }
 
 void PixelShader::Bind(Graphics& gfx)
 {
-	gfx.m_DevContext->PSSetShader(m_pPixelShader.Get(), 0, 0);
+	gfx.GetContext()->PSSetShader(m_pPixelShader.Get(), 0, 0);
 
 }

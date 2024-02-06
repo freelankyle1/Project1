@@ -179,6 +179,7 @@
     <ClInclude Include="Source Files\Headers\Rendering\inputlayout.h" />
     <ClInclude Include="Source Files\Headers\Rendering\pixelconstants.h" />
     <ClInclude Include="Source Files\Headers\Rendering\renderable2d.h" />
+    <ClInclude Include="Source Files\Headers\Rendering\renderer2d.h" />
     <ClInclude Include="Source Files\Headers\Rendering\shader.h" />
     <ClInclude Include="Source Files\Headers\Rendering\topology.h" />
     <ClInclude Include="Source Files\Headers\Rendering\triangle2d.h" />

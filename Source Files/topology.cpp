@@ -7,5 +7,5 @@ Topology::Topology(Graphics& gfx, D3D11_PRIMITIVE_TOPOLOGY tp)
 
 void Topology::Bind(Graphics& gfx)
 {
-	gfx.m_DevContext->IASetPrimitiveTopology(m_tp);
+	gfx.GetContext()->IASetPrimitiveTopology(m_tp);
 }

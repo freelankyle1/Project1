@@ -17,14 +17,14 @@ IndexBuffer::IndexBuffer(Graphics& gfx, std::vector<USHORT>& buffer)
 	m_SubresourceData.pSysMem = buffer.data();
 	
 	HRESULT hr;
-	hr = gfx.m_Device->CreateBuffer(&m_BufferDesc, &m_SubresourceData, &m_pBuffer);
+	hr = gfx.GetDevice()->CreateBuffer(&m_BufferDesc, &m_SubresourceData, &m_pBuffer);
 	ASSERT(hr, "failed to create index buffer!");
 
 }
 
 void IndexBuffer::Bind(Graphics& gfx)
 {
-	gfx.m_DevContext->IASetIndexBuffer(m_pBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+	gfx.GetContext()->IASetIndexBuffer(m_pBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 }
 
 

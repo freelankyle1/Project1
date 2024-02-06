@@ -19,12 +19,14 @@ VertexBuffer::VertexBuffer(Graphics& gfx, const std::vector<Vertex>& buffer)
 	m_SubresourceData.pSysMem = buffer.data();
 
 	HRESULT hr;
-	hr = gfx.m_Device->CreateBuffer(&m_BufferDesc, &m_SubresourceData, &m_pBuffer);
+	//hr = gfx.m_Device->CreateBuffer(&m_BufferDesc, &m_SubresourceData, &m_pBuffer);
+	hr = gfx.GetDevice()->CreateBuffer(&m_BufferDesc, &m_SubresourceData, &m_pBuffer);
 	ASSERT(hr, "failed to create vertex buffer!");
 
 }
 
 void VertexBuffer::Bind(Graphics& gfx)
 {
-	gfx.m_DevContext->IASetVertexBuffers(0u, 1u, m_pBuffer.GetAddressOf(), &m_Stride, &m_Offset);
+	//gfx.m_DevContext->IASetVertexBuffers(0u, 1u, m_pBuffer.GetAddressOf(), &m_Stride, &m_Offset);
+	gfx.GetContext()->IASetVertexBuffers(0u, 1u, m_pBuffer.GetAddressOf(), &m_Stride, &m_Offset);
 }

@@ -16,12 +16,12 @@ PixelConstant::PixelConstant(Graphics& gfx, ConstantBuffer2& constBuffer)
 	sr.pSysMem = &constBuffer;
 
 	HRESULT hr;
-	hr = gfx.m_Device->CreateBuffer(&bd, &sr, &m_pBuffer);
+	hr = gfx.GetDevice()->CreateBuffer(&bd, &sr, &m_pBuffer);
 	ASSERT(hr, "failed to create pixel constant buffer!");
 
 }
 
 void PixelConstant::Bind(Graphics& gfx)
 {
-	gfx.m_DevContext->PSSetConstantBuffers(0u, 1u, m_pBuffer.GetAddressOf());
+	gfx.GetContext()->PSSetConstantBuffers(0u, 1u, m_pBuffer.GetAddressOf());
 }
