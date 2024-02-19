@@ -12,7 +12,7 @@ public:
 	virtual void AddBind(std::shared_ptr<Bindable> bind) = 0;
 	virtual DirectX::XMMATRIX GetTransform(Graphics& gfx) = 0;
 	virtual UINT GetIndexCount() const = 0;
-	virtual void Update(Graphics& gfx, float dt) = 0;
+	virtual void Update(Graphics& gfx, float xx, float yy, float dt) = 0;
 	
 
 protected:

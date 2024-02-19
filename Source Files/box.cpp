@@ -29,7 +29,7 @@ Box::Box(Graphics& gfx)
 
 	std::random_device rd2;
 	std::mt19937 mt2(rd2());
-	std::uniform_real_distribution<float> distribution2(-5.0f, 5.0f);
+	std::uniform_real_distribution<float> distribution2(-10.0f, 5.0f);
 
 	randTranslationX = distribution2(mt2);
 

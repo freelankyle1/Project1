@@ -2,7 +2,8 @@
 #include "Headers/Rendering/globals.h"
 #include "Headers/Rendering/triangle2d.h"
 
-Triangle2D::Triangle2D(Graphics& gfx)
+Triangle2D::Triangle2D(Graphics& gfx, float xx, float yy, float zz)
+	:translationX(xx), translationY(yy), translationZ(zz)
 {
 	std::vector<Vertex> vertices =
 	{
@@ -79,9 +80,9 @@ DirectX::XMMATRIX Triangle2D::GetTransform(Graphics& gfx)
 {
 	using namespace DirectX;
 	return	XMMatrixRotationZ  (0.0f) *
-			XMMatrixRotationY  (0.0f) *
+			XMMatrixRotationY  (rotationY) *
 			XMMatrixRotationX  (0.0f) *
-			XMMatrixTranslation(0.0f, 0.0f, 5.0f);
+			XMMatrixTranslation(translationX, 0.0f, translationZ);
 }
 
 UINT Triangle2D::GetIndexCount() const
@@ -89,10 +90,15 @@ UINT Triangle2D::GetIndexCount() const
 	return m_IndexCount;
 }
 
-void Triangle2D::Update(Graphics& gfx, float dt)
+void Triangle2D::Update(Graphics& gfx, float xx, float zz, float rY)
 {
 	using namespace DirectX;
 
+	//rotationX += 0.025f;
+
+	translationX += xx;
+	translationZ += zz;
+	rotationY += rY;
 
 	ConstantBuffer cb = {
 		XMMatrixTranspose(

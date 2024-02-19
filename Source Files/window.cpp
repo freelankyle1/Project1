@@ -1,5 +1,6 @@
 #include "Headers/pch.h"
 #include "Headers/window.h"
+#include "Headers/keys.h"
 
 window::windowClass window::windowClass::wndClass;
 
@@ -85,11 +86,14 @@ window::window(int width, int height, const char* name)
        
     ShowWindow(m_hWnd, SW_SHOWDEFAULT);
 
+    keys::Init();
+
     m_gfx = std::make_unique<Graphics>(m_hWnd);
 }
 
 window::~window()
 {
+    keys::Shutdown();
     DestroyWindow(m_hWnd);
 }
 
@@ -195,26 +199,30 @@ LRESULT window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
     }
     case (WM_LBUTTONDOWN):
     {
-        const POINTS pt = MAKEPOINTS(lParam);
-        m_mouse.OnLeftPressed(pt.x, pt.y);
+        //const POINTS pt = MAKEPOINTS(lParam);
+        //m_mouse.OnLeftPressed(pt.x, pt.y);
+        keys::ButtonDown(0);
         break;
     }
     case (WM_RBUTTONDOWN):
     {
-        const POINTS pt = MAKEPOINTS(lParam);
-        m_mouse.OnRightPressed(pt.x, pt.y);
+        //const POINTS pt = MAKEPOINTS(lParam);
+        //m_mouse.OnRightPressed(pt.x, pt.y);
+        keys::ButtonDown(1);
         break;
     }
     case (WM_LBUTTONUP):
     {
-        const POINTS pt = MAKEPOINTS(lParam);
-        m_mouse.OnLeftReleased(pt.x, pt.y);
+        //const POINTS pt = MAKEPOINTS(lParam);
+        //m_mouse.OnLeftReleased(pt.x, pt.y);
+        keys::ButtonUp(0);
         break;
     }
     case (WM_RBUTTONUP):
     {
-        const POINTS pt = MAKEPOINTS(lParam);
-        m_mouse.OnRightReleased(pt.x, pt.y);
+        //const POINTS pt = MAKEPOINTS(lParam);
+        //m_mouse.OnRightReleased(pt.x, pt.y);
+        keys::ButtonUp(1);
         break;
     }
     case (WM_MOUSEWHEEL):
@@ -233,17 +241,16 @@ LRESULT window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 
     
     case(WM_KEYDOWN):
-
-    case(WM_SYSKEYDOWN):
-        if (!(lParam & 0x40000000) || kbd.AutorepeatIsEnabled())
-        {
-            kbd.OnKeyPressed(static_cast<unsigned char>(wParam));
-        }
+    {
+        keys::ProcessKeyDown(0, 0, wParam);
         break;
+    }
     case(WM_KEYUP):
-    case(WM_SYSKEYUP):
-        kbd.OnKeyReleased(static_cast<unsigned char>(wParam));
+    {
+        keys::ProcessKeyUp(0, 0, wParam);
         break;
+    }
+    
     case(WM_CHAR):
         kbd.OnChar(static_cast<unsigned char>(wParam));
         break;

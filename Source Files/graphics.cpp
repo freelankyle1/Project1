@@ -1,12 +1,6 @@
 #include "Headers/pch.h"
 #include "Headers/asserts.h"
 #include "Headers/Rendering/graphics.h"
-#include "Headers/Rendering/vertexbuffer.h"
-#include "Headers/Rendering/indexbuffer.h"
-#include "Headers/Rendering/shader.h"
-#include "Headers/Rendering/inputlayout.h"
-#include "Headers/Rendering/topology.h"
-#include "Headers/Rendering/globals.h"
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 

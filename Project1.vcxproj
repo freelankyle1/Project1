@@ -148,6 +148,7 @@
     <ClCompile Include="Source Files\graphics.cpp" />
     <ClCompile Include="Source Files\indexbuffer.cpp" />
     <ClCompile Include="Source Files\inputlayout.cpp" />
+    <ClCompile Include="Source Files\keys.cpp" />
     <ClCompile Include="Source Files\mouse.cpp" />
     <ClCompile Include="Source Files\Keyboard.cpp" />
     <ClCompile Include="Source Files\main.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="Source Files\Headers\asserts.h" />
     <ClInclude Include="Source Files\Headers\d3dapp.h" />
     <ClInclude Include="Source Files\Headers\d3dexception.h" />
+    <ClInclude Include="Source Files\Headers\keys.h" />
     <ClInclude Include="Source Files\Headers\Rendering\bindable.h" />
     <ClInclude Include="Source Files\Headers\Rendering\globals.h" />
     <ClInclude Include="Source Files\Headers\Rendering\box.h" />
