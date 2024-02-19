@@ -25,10 +25,6 @@ namespace keys
 	{
 		return Keys[keycode];
 	}
-	void Shutdown()
-	{
-		delete[] Keys;
-	}
 
 
 	bool* mouse = new bool[2];
@@ -46,4 +42,10 @@ namespace keys
 		return mouse[whichButton];
 	}
 
+
+	void Shutdown()
+	{
+		delete[] Keys;
+		delete[] mouse;
+	}
 }
