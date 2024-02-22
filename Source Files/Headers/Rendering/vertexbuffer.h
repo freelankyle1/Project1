@@ -6,14 +6,12 @@
 #include "bindable.h"
 
 
-//Buffers ARE Bindables - Buffer Inherits Bindable
-//Reason for templating this class:
-//So vertex buffers can be filled with a vector of:
-//Vec3s, Vec4s, etc
+
 class VertexBuffer : public Bindable
 {
 public:
 	VertexBuffer(Graphics& gfx, const std::vector<Vertex>& buffer);
+	VertexBuffer(Graphics& gfx, const VertexData* buffer, const int buffersize);
 	void Bind(Graphics& gfx) override;
 	
 private:

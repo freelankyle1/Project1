@@ -11,13 +11,21 @@
 class Triangle2D : public Renderable2D
 {
 public:
-	Triangle2D(Graphics& gfx, float xx, float yy, float zz);
+	Triangle2D(Graphics& gfx, const VertexData* vData);
+	~Triangle2D() override;
 	void Bind(Graphics& gfx) const override;
 	void AddBind(std::shared_ptr<Bindable> bind) override;
 	void AddIndexBuffer(std::shared_ptr<IndexBuffer> ib);
 	DirectX::XMMATRIX GetTransform(Graphics& gfx) override;
 	UINT GetIndexCount() const override;
 	void Update(Graphics& gfx, float xx, float yy, float dt) override;
+	VertexData* GetVertexData() const override;
+	virtual unsigned short* GetIndices() const override;
+	virtual unsigned int GetVertexCount() const override;
+	void Cleanup() override;
+
+
+
 
 	float rotationY = 0.0f;
 	float rotationX = 0.0f;
@@ -27,7 +35,12 @@ public:
 	float translationY;
 	float translationZ = 5.0f;
 
-	//uint indexcount m_IndexCount
-	//vector of binds m_Binds
+	static bool staticInit;
+	static UINT indexCount;
+
+	VertexData* PerVertex;
+	unsigned short* indices;
+	unsigned int VertexCount;
+
 
 };

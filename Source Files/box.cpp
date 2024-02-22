@@ -147,6 +147,6 @@ void Box::Update(Graphics& gfx, float dt)
 	};
 
 
-	vcbuffer->UpdateConstant(gfx, cb );
+	//vcbuffer->UpdateConstant(gfx, cb );
 }
 

@@ -4,13 +4,16 @@
 #include "timer.h"
 #include "Rendering/box.h"
 #include "Rendering/renderable2d.h"
+#include "Rendering/renderer2d.h"
 
 
 class App
 {
 public:
 	App();
+	~App();
 
+	void Test(float translationX, float translationZ);
 	WPARAM Go();
 
 private:
@@ -20,6 +23,10 @@ private:
 	window m_Wnd;
 	std::vector<std::unique_ptr<class Box>> Boxes;
 	std::vector<std::unique_ptr<Renderable2D>> m_Renderables;
+
+	Renderer2D* renderer;
+	std::shared_ptr<VertexConstant> vconstant;
+
 	
 //check timer.h for this define
 #ifdef WINDOWS_TIMER

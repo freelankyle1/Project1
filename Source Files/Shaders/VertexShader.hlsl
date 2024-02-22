@@ -1,6 +1,6 @@
 
 
-cbuffer CBuf
+cbuffer cbuf : register(b0)
 {
    matrix transform;
 };

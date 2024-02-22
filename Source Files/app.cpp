@@ -4,6 +4,7 @@
 #include "Headers/Rendering/shader.h"
 #include "Headers/Rendering/box.h"
 #include "Headers/Rendering/triangle2d.h"
+#include "Headers/Rendering/quad2d.h"
 #include <random>
 
 #include "Headers/keys.h"
@@ -16,35 +17,14 @@
 App::App()
 	: m_Wnd(SCREEN_WIDTH,SCREEN_HEIGHT,"Kyles dungeon")
 {
-	/*
-	for (int i =0; i < 5; i++)
-		Boxes.push_back(std::make_unique<Box>(m_Wnd.Gfx()));
-	float fFov = 45.0f;
-	float fFovRad = 1.0f / tanf(fFov * 0.5 / 180.0f * 3.14159f);
-	*/
-
-	float randomTranslationX = 0.0f;
-	float randomTranslationZ = 0.0f;
-	for (int i = 0; i < 150; i++)
-	{
-		std::random_device rd2;
-		std::mt19937 mt2(rd2());
-		std::uniform_real_distribution<float> distribution2(-20.0f, 15.0f);
-
-		randomTranslationX = distribution2(mt2);
-
-		std::random_device rd3;
-		std::mt19937 mt3(rd3());
-		std::uniform_real_distribution<float> distribution3(2.5f, 15.0f);
-
-
-		randomTranslationZ = distribution3(mt3);
-
-
-		m_Renderables.push_back(std::make_unique<Triangle2D>(m_Wnd.Gfx(), randomTranslationX, 0.0f, randomTranslationZ));
-	}
-
 	m_Wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, (float)SCREEN_HEIGHT / (float)SCREEN_WIDTH, 0.25f, 100.0f));
+	renderer = new Renderer2D(m_Wnd.Gfx());
+}
+
+App::~App()
+{
+	renderer->Shutdown();
+	delete renderer;
 }
 
 WPARAM App::Go()
@@ -64,6 +44,7 @@ WPARAM App::Go()
 float currtime = 0.0f;
 std::string trans;
 
+
 void App::DoFrame()
 {
 	float translationX = 0.0f;
@@ -72,8 +53,6 @@ void App::DoFrame()
 
 	timer.Tick();
 	currtime = timer.CurrTime();
-	
-	m_Wnd.Gfx().ClearBuffer(0.0f, 0.0f, 0.0f);
 	
 	if (keys::IsKeyPressed(65) != false)
 		translationX =  0.045f;
@@ -88,22 +67,24 @@ void App::DoFrame()
 	if (keys::IsButtonPressed(1) == true) //is the left button (index 0) pressed
 		rotationY = -0.025f;
 
-	//TODO: Create a camera interface
 
-	for (const auto& it : m_Renderables)
-	{
-		it->Bind(m_Wnd.Gfx());
-		it->Update(m_Wnd.Gfx(), translationX, translationZ, rotationY);
-		m_Wnd.Gfx().DrawIndexed(it->GetIndexCount());
-	}
+	m_Wnd.Gfx().ClearBuffer(0.0f, 0.0f, 0.0f);
 
-	/*
-	for (const auto& it : Boxes)
+	VertexData dataArr[3];
+
+
+	for (float y = 3.0f; y > -3.0f; y -= 0.5f)
 	{
-		it->Update(m_Wnd.Gfx(), currtime);
-		it->Draw(m_Wnd.Gfx());
+		for (float x = -6.0f; x < 6.0f; x += 0.5)
+		{
+			dataArr[0].pos = DirectX::XMFLOAT3(x,       y,       0.0f);
+			dataArr[1].pos = DirectX::XMFLOAT3(x + 0.4, y + 0.4, 0.0f);
+			dataArr[2].pos = DirectX::XMFLOAT3(x + 0.4, y,       0.0f);
+
+			renderer->Submit(std::make_shared<Triangle2D>(m_Wnd.Gfx(), dataArr));
+		}
 	}
-	*/
+	renderer->Flush();
 	m_Wnd.Gfx().EndFrame();
 
 }

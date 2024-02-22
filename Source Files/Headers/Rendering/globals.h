@@ -1,8 +1,5 @@
 #pragma once
-#include "../pch.h"
 #include <DirectXMath.h>
-
-//Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
 
 struct Vertex
 {
@@ -29,4 +26,10 @@ struct ConstantBuffer2
 		float b;
 		float a;
 	}face_colors[6];
+};
+
+struct VertexData
+{
+	DirectX::XMFLOAT3 pos;
+	//DirectX::XMFLOAT4 col;
 };

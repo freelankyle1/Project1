@@ -2,58 +2,36 @@
 #include "Headers/Rendering/globals.h"
 #include "Headers/Rendering/triangle2d.h"
 
-Triangle2D::Triangle2D(Graphics& gfx, float xx, float yy, float zz)
-	:translationX(xx), translationY(yy), translationZ(zz)
+bool Triangle2D::staticInit;
+UINT Triangle2D::indexCount;
+
+Triangle2D::Triangle2D(Graphics& gfx, const VertexData* vData)
+	:translationX(0.0f), translationY(0.0f), translationZ(0.0f), VertexCount(3)
 {
-	std::vector<Vertex> vertices =
-	{
-		{-1.0f,-1.0f, 0.0f},
-		{ 1.0f, 1.0f, 0.0f},
-		{ 1.0f,-1.0f, 0.0f},
-	};
-	
-	AddBind(std::make_shared<VertexBuffer>(gfx, vertices));
+	PerVertex = new VertexData[3];
 
-	auto pvs = std::make_shared<VertexShader>(gfx, L"VertexShader.cso");
-	auto pvsbc = pvs->GetByteCode();
-	AddBind(std::move(pvs));
+	PerVertex[0].pos = vData[0].pos;
+	PerVertex[1].pos = vData[1].pos;
+	PerVertex[2].pos = vData[2].pos;
 
-	AddBind(std::make_shared<PixelShader>(gfx, L"PixelShader.cso"));
+	indices = new unsigned short[3];
 
-	std::vector<USHORT> indices =
-	{
-		0,1,2,
-	};
-	
-	AddIndexBuffer(std::make_shared<IndexBuffer>(gfx, indices));
-
-
-	ConstantBuffer2 cb2
-	{
-		{
-			{1.0f,0.0f,1.0f},
-		}
-	};
-
-	AddBind(std::make_shared<PixelConstant>(gfx, cb2));
-
-	std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
-	{
-		{"Position", 0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0}
-	};
-
-	AddBind(std::make_shared<InputLayout>(gfx, ied, pvsbc));
-
-	AddBind(std::make_shared<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
-	
-	ConstantBuffer cb;
-	cb.transform = GetTransform(gfx);
-
-	std::shared_ptr vcb = std::make_shared<VertexConstant>(gfx, cb);
-	m_VcBuffer = vcb.get();
-	AddBind(std::move(vcb));
+	indices[0] = 0;
+	indices[1] = 1;
+	indices[2] = 2;
 
 }
+
+Triangle2D::~Triangle2D()
+{}
+
+void Triangle2D::Cleanup()
+{
+	delete[] PerVertex;
+	delete[] indices;
+	delete m_VcBuffer;
+}
+
 
 void Triangle2D::Bind(Graphics& gfx) const
 {
@@ -72,7 +50,7 @@ void Triangle2D::AddBind(std::shared_ptr<Bindable> bind)
 
 void Triangle2D::AddIndexBuffer(std::shared_ptr<IndexBuffer> ib)
 {
-	m_IndexCount = ib->GetSize();
+	indexCount = ib->GetSize();
 	m_Binds.push_back(std::move(ib));
 }
 
@@ -80,25 +58,38 @@ DirectX::XMMATRIX Triangle2D::GetTransform(Graphics& gfx)
 {
 	using namespace DirectX;
 	return	XMMatrixRotationZ  (0.0f) *
-			XMMatrixRotationY  (rotationY) *
+			XMMatrixRotationY  (0.0f) *
 			XMMatrixRotationX  (0.0f) *
-			XMMatrixTranslation(translationX, 0.0f, translationZ);
+			XMMatrixTranslation(translationX, 0.0f, 5.0f);
 }
 
 UINT Triangle2D::GetIndexCount() const
 {
-	return m_IndexCount;
+	return indexCount;
 }
 
+VertexData* Triangle2D::GetVertexData() const
+{
+	return PerVertex;
+}
+
+unsigned short* Triangle2D::GetIndices() const
+{
+	return indices;
+}
+
+unsigned int Triangle2D::GetVertexCount() const
+{
+	return VertexCount;
+}
+
+//these floats are if we want to move the object based on something
+//i.e. camera movement potentially
 void Triangle2D::Update(Graphics& gfx, float xx, float zz, float rY)
 {
 	using namespace DirectX;
 
-	//rotationX += 0.025f;
-
 	translationX += xx;
-	translationZ += zz;
-	rotationY += rY;
 
 	ConstantBuffer cb = {
 		XMMatrixTranspose(
@@ -106,5 +97,5 @@ void Triangle2D::Update(Graphics& gfx, float xx, float zz, float rY)
 	};
 
 
-	m_VcBuffer->UpdateConstant(gfx, cb);
+	m_VcBuffer->UpdateConstant(cb);
 }

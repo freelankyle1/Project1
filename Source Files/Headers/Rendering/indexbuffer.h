@@ -8,6 +8,8 @@ class IndexBuffer : public Bindable
 {
 public:
 	IndexBuffer(Graphics& gfx, std::vector<USHORT>& buffer);
+	IndexBuffer(Graphics& gfx, unsigned short* buffer, int indexCount);
+
 	void Bind(Graphics& gfx) override;
 	UINT GetSize() const;
 

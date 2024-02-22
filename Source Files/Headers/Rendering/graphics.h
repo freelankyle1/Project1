@@ -3,7 +3,6 @@
 #include "../timer.h"
 #include "../d3dexception.h"
 #include "shader.h"
-#include "renderer2d.h"
 #include <DirectXMath.h>
 
 class Graphics : public NonCopyable
@@ -30,5 +29,4 @@ private:
 
 	DirectX::XMMATRIX projection;
 	
-	friend class Renderer2D;
 };
