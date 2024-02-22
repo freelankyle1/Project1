@@ -31,7 +31,6 @@ Graphics::Graphics(HWND hWnd)
 
 	HRESULT hr;
 
-
 	hr = D3D11CreateDeviceAndSwapChain(
 		nullptr, D3D_DRIVER_TYPE_HARDWARE,
 		nullptr, D3D11_CREATE_DEVICE_DEBUG, nullptr,

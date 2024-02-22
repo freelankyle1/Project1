@@ -7,8 +7,6 @@ window::windowClass window::windowClass::wndClass;
 window::windowClass::windowClass()
 	: m_hInstance(GetModuleHandle(nullptr))
 {
-
-
     // clear out the window class for use
     ZeroMemory(&m_wc, sizeof(WNDCLASSEX));
 

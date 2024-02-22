@@ -42,8 +42,11 @@ WPARAM App::Go()
 }
 
 float currtime = 0.0f;
-std::string trans;
+float startFrame = 0.0f;
+int frames = 0;
 
+
+windowsTimer timer1;
 
 void App::DoFrame()
 {
@@ -51,8 +54,9 @@ void App::DoFrame()
 	float translationZ = 0.0f;
 	float rotationY = 0.0f;
 
-	timer.Tick();
-	currtime = timer.CurrTime();
+	timer1.Tick();
+	startFrame = timer1.CurrTime();
+
 	
 	if (keys::IsKeyPressed(65) != false)
 		translationX =  0.045f;
@@ -72,20 +76,38 @@ void App::DoFrame()
 
 	VertexData dataArr[3];
 
-
 	for (float y = 5.0f; y > -5.5f; y -= 0.1f)
 	{
-		for (float x = -10.0f; x < 10.0f; x += 0.1)
+		for (float x = -10.0f; x < 10.0f; x += 0.1f)
 		{
-			dataArr[0].pos = DirectX::XMFLOAT3(x,       y,       0.0f);
+			dataArr[0].pos = DirectX::XMFLOAT3(x, y, 0.0f);
 			dataArr[1].pos = DirectX::XMFLOAT3(x + 0.1, y + 0.1, 0.0f);
-			dataArr[2].pos = DirectX::XMFLOAT3(x + 0.1, y,       0.0f);
+			dataArr[2].pos = DirectX::XMFLOAT3(x + 0.1, y, 0.0f);
 
 			renderer->Submit(std::make_shared<Triangle2D>(m_Wnd.Gfx(), dataArr));
 		}
 	}
+
 	renderer->Update(translationX, 0.0f, translationZ);
+	
+	//debugging purposes / performance
+	int PolyCount = renderer->GetVertexAmount() / 3;
+
 	renderer->Flush();
 	m_Wnd.Gfx().EndFrame();
+
+	timer1.Tick();
+	float betweenFrame = timer1.CurrTime();
+	
+	frames++;
+	if (betweenFrame - startFrame >= 1)
+	{
+		std::stringstream ss;
+		ss.clear();
+
+		ss << "[FPS: " << frames << "] [" << "Polygon Count: " << PolyCount << "]" << '\n';
+		OutputDebugString(ss.str().c_str());
+		frames = 0;
+	}
 
 }

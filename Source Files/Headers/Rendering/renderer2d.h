@@ -4,7 +4,7 @@
 #include "vertexbuffer.h"
 #include "indexbuffer.h"
 
-#define MAX_VERTEX_COUNT 30000
+#define MAX_VERTEX_COUNT 50000
 #define MAX_INDEX_BYTE_COUNT MAX_VERTEX_COUNT * 3 //for triangles
 #define MAX_VERTEX_BYTE_COUNT MAX_VERTEX_COUNT * 3
 
@@ -15,6 +15,7 @@ public:
 	void Submit(std::shared_ptr<Renderable2D> obj);
 	void Flush();
 	void Update(float transX, float transY, float transZ);
+	int GetVertexAmount() const;
 	void Shutdown();
 
 	VertexData* vData;
@@ -24,7 +25,5 @@ public:
 	int indexCount;
 
 	Graphics& gfx;
-	std::vector<std::shared_ptr<Renderable2D>> renderables;
-
-	std::unique_ptr<VertexConstant> vconst;
+	std::unique_ptr<VertexConstant> vConst;
 };

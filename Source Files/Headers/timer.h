@@ -1,7 +1,7 @@
 #pragma once
 #include "pch.h"
 
-//#define WINDOWS_TIMER 
+#define WINDOWS_TIMER 
 
 #ifdef WINDOWS_TIMER
 

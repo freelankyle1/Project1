@@ -23,15 +23,15 @@ Triangle2D::Triangle2D(Graphics& gfx, const VertexData* vData)
 }
 
 Triangle2D::~Triangle2D()
-{}
-
-void Triangle2D::Cleanup()
 {
 	delete[] PerVertex;
 	delete[] indices;
-	delete m_VcBuffer;
 }
 
+void Triangle2D::Cleanup()
+{
+
+}
 
 void Triangle2D::Bind(Graphics& gfx) const
 {

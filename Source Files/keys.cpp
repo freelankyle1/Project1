@@ -13,17 +13,17 @@ namespace keys
 			Keys[i] = false;
 		}
 	}
-	void ProcessKeyDown(bool prevKeyState, bool transitionState, char keycode)
+	void ProcessKeyDown(bool prevKeyState, bool transitionState, char keyCode)
 	{
-		Keys[keycode] = true;
+		Keys[keyCode] = true;
 	}
-	void ProcessKeyUp(bool prevKeyState, bool transitionState, char keycode)
+	void ProcessKeyUp(bool prevKeyState, bool transitionState, char keyCode)
 	{
-		Keys[keycode] = false;
+		Keys[keyCode] = false;
 	}
-	bool IsKeyPressed(char keycode)
+	bool IsKeyPressed(char keyCode)
 	{
-		return Keys[keycode];
+		return Keys[keyCode];
 	}
 
 

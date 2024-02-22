@@ -49,10 +49,9 @@ Renderer2D::Renderer2D(Graphics& gfxDevice)
 					DirectX::XMMatrixTranslation(0.0f, 0.0f, 5.0f);
 	cb.transform = cb.transform * gfx.GetProjection();
 
-	
-	vconst = std::make_unique<VertexConstant>(gfx);
-	vconst->Initialize(cb);
-	vconst->Bind(gfx);
+	vConst = std::make_unique<VertexConstant>(gfx);
+	vConst->Initialize(cb);
+	vConst->Bind(gfx);
 }
 
 void Renderer2D::Flush()
@@ -67,6 +66,14 @@ void Renderer2D::Flush()
 
 	vDataSize = 0;
 	indexCount = 0;
+
+	delete[] vData;
+	delete[] iData;
+
+	vData = new VertexData[MAX_VERTEX_BYTE_COUNT];
+	memset(vData, 0, MAX_INDEX_BYTE_COUNT);
+	iData = new unsigned short[MAX_INDEX_BYTE_COUNT];
+	memset(iData, 0, MAX_INDEX_BYTE_COUNT);
 
 }
 
@@ -96,7 +103,6 @@ void Renderer2D::Submit(std::shared_ptr<Renderable2D> obj)
 
 	VertexData = nullptr;
 	IndexData = nullptr;
-
 }
 
 static float translationX = 0.0f;
@@ -112,9 +118,14 @@ void Renderer2D::Update(float transX, float transY, float transZ)
 			DirectX::XMMatrixTranslation(translationX, 0.0f, translationZ) * gfx.GetProjection())
 	};
 
-	vconst->UpdateConstant(cb);
+	vConst->UpdateConstant(cb);
 }
 
+//debugging purposes
+int Renderer2D::GetVertexAmount() const
+{
+	return vDataSize;
+}
 
 void Renderer2D::Shutdown()
 {
