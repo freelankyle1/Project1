@@ -9,10 +9,10 @@
 Renderer2D::Renderer2D(Graphics& gfxDevice)
 	: gfx(gfxDevice)
 {
-	vData = new VertexData[30000 * sizeof(VertexData)];
-	memset(vData, 0, 30000);
-	iData = new unsigned short[30000 * 3];
-	memset(iData, 0, 30000 * 3);
+	vData = new VertexData[MAX_VERTEX_BYTE_COUNT];
+	memset(vData, 0, MAX_INDEX_BYTE_COUNT);
+	iData = new unsigned short[MAX_INDEX_BYTE_COUNT];
+	memset(iData, 0, MAX_INDEX_BYTE_COUNT);
 
 	VertexShader vs(gfx, L"VertexShader.cso");
 	auto pvsbc = vs.GetByteCode();
@@ -79,7 +79,7 @@ void Renderer2D::Submit(std::shared_ptr<Renderable2D> obj)
 	vData[vDataSize + 1] = VertexData[1];
 	vData[vDataSize + 2] = VertexData[2];
 	
-	vDataSize += obj->GetVertexCount();
+	vDataSize += 3;
 
 	iData[indexCount + 0] = IndexData[0];
 	iData[indexCount + 1] = IndexData[1];
