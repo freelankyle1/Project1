@@ -10,6 +10,7 @@ public:
 	Renderer2D(Graphics& gfx);
 	void Submit(std::shared_ptr<Renderable2D> obj);
 	void Flush();
+	void Update(float transX, float transY, float transZ);
 	void Shutdown();
 
 	VertexData* vData;

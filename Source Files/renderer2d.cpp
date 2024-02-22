@@ -24,7 +24,7 @@ Renderer2D::Renderer2D(Graphics& gfxDevice)
 	ConstantBuffer2 cb2
 	{
 		{
-			{0.5f,0.0f,1.0f},
+			{0.5f,0.5f,1.0f},
 		}
 	};
 
@@ -96,7 +96,25 @@ void Renderer2D::Submit(std::shared_ptr<Renderable2D> obj)
 
 	VertexData = nullptr;
 	IndexData = nullptr;
+
 }
+
+static float translationX = 0.0f;
+static float translationZ = 5.0f;
+
+void Renderer2D::Update(float transX, float transY, float transZ)
+{
+	translationX += transX;
+	translationZ += transZ;
+
+	ConstantBuffer cb = {
+		DirectX::XMMatrixTranspose(
+			DirectX::XMMatrixTranslation(translationX, 0.0f, translationZ) * gfx.GetProjection())
+	};
+
+	vconst->UpdateConstant(cb);
+}
+
 
 void Renderer2D::Shutdown()
 {

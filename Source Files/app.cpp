@@ -73,17 +73,18 @@ void App::DoFrame()
 	VertexData dataArr[3];
 
 
-	for (float y = 3.0f; y > -3.0f; y -= 0.5f)
+	for (float y = 5.0f; y > -5.5f; y -= 0.1f)
 	{
-		for (float x = -6.0f; x < 6.0f; x += 0.5)
+		for (float x = -10.0f; x < 10.0f; x += 0.1)
 		{
 			dataArr[0].pos = DirectX::XMFLOAT3(x,       y,       0.0f);
-			dataArr[1].pos = DirectX::XMFLOAT3(x + 0.4, y + 0.4, 0.0f);
-			dataArr[2].pos = DirectX::XMFLOAT3(x + 0.4, y,       0.0f);
+			dataArr[1].pos = DirectX::XMFLOAT3(x + 0.1, y + 0.1, 0.0f);
+			dataArr[2].pos = DirectX::XMFLOAT3(x + 0.1, y,       0.0f);
 
 			renderer->Submit(std::make_shared<Triangle2D>(m_Wnd.Gfx(), dataArr));
 		}
 	}
+	renderer->Update(translationX, 0.0f, translationZ);
 	renderer->Flush();
 	m_Wnd.Gfx().EndFrame();
 
