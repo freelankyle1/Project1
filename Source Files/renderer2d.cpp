@@ -24,7 +24,7 @@ Renderer2D::Renderer2D(Graphics& gfxDevice)
 	ConstantBuffer2 cb2
 	{
 		{
-			{0.5f,0.5f,1.0f},
+			{0.5f,0.5f,1.0f}, 
 		}
 	};
 
@@ -56,25 +56,7 @@ Renderer2D::Renderer2D(Graphics& gfxDevice)
 
 void Renderer2D::Flush()
 {
-	VertexBuffer vBuffer(gfx, vData, vDataSize);
-	vBuffer.Bind(gfx);
-
-	IndexBuffer iBuffer(gfx, iData, indexCount);
-	iBuffer.Bind(gfx);
-	
 	gfx.DrawIndexed(indexCount);
-
-	vDataSize = 0;
-	indexCount = 0;
-
-	delete[] vData;
-	delete[] iData;
-
-	vData = new VertexData[MAX_VERTEX_BYTE_COUNT];
-	memset(vData, 0, MAX_INDEX_BYTE_COUNT);
-	iData = new unsigned short[MAX_INDEX_BYTE_COUNT];
-	memset(iData, 0, MAX_INDEX_BYTE_COUNT);
-
 }
 
 void Renderer2D::Submit(std::shared_ptr<Renderable2D> obj)
@@ -103,6 +85,15 @@ void Renderer2D::Submit(std::shared_ptr<Renderable2D> obj)
 
 	VertexData = nullptr;
 	IndexData = nullptr;
+}
+
+void Renderer2D::StartBatch()
+{
+	VertexBuffer vBuffer(gfx, vData, vDataSize);
+	vBuffer.Bind(gfx);
+
+	IndexBuffer iBuffer(gfx, iData, indexCount);
+	iBuffer.Bind(gfx);
 }
 
 static float translationX = 0.0f;

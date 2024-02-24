@@ -30,9 +30,12 @@ private:
 	
 //check timer.h for this define
 #ifdef WINDOWS_TIMER
-	windowsTimer timer;
+	windowsTimer timer1;
 #else
 	Timer timer;
 #endif
+	float currtime = 0.0f;
+	float startFrame = 0.0f;
+	int frames = 0;
 
 };

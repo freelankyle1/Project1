@@ -13,12 +13,17 @@ public:
 
 	void Tick();
 	double CurrTime() const;
+	void GetFPS(float startFrame, int polyCount);
+
 
 private:
 	INT64 start, end, delta;
 	INT64 freq;
 
 	double mSecPerCount;
+
+	float currtime = 0.0f;
+	int frames = 0;
 
 };
 

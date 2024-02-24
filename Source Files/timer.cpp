@@ -32,6 +32,23 @@ double windowsTimer::CurrTime() const
 	return delta;
 }
 
+void windowsTimer::GetFPS(float startFrame, int polyCount)
+{
+	this->Tick();
+	float betweenFrame = this->CurrTime();
+
+	frames++;
+	if (betweenFrame - startFrame >= 1)
+	{
+		std::stringstream ss;
+		ss.clear();
+
+		ss << "[FPS: " << frames << "] [" << "Polygon Count: " << polyCount << "]" << '\n';
+		OutputDebugString(ss.str().c_str());
+		frames = 0;
+	}
+}
+
 #endif
 
 
