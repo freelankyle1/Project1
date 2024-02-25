@@ -72,9 +72,6 @@
     <ClCompile Include="Source Files\indexbuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\box.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source Files\vertexbuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -144,9 +141,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source Files\Headers\Rendering\indexbuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source Files\Headers\Rendering\box.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source Files\Headers\Rendering\globals.h">

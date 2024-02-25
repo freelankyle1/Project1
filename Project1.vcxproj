@@ -143,7 +143,6 @@
   <ItemGroup>
     <ClCompile Include="Source Files\app.cpp" />
     <ClCompile Include="Source Files\asserts.cpp" />
-    <ClCompile Include="Source Files\box.cpp" />
     <ClCompile Include="Source Files\d3dexception.cpp" />
     <ClCompile Include="Source Files\graphics.cpp" />
     <ClCompile Include="Source Files\indexbuffer.cpp" />
@@ -175,7 +174,6 @@
     <ClInclude Include="Source Files\Headers\keys.h" />
     <ClInclude Include="Source Files\Headers\Rendering\bindable.h" />
     <ClInclude Include="Source Files\Headers\Rendering\globals.h" />
-    <ClInclude Include="Source Files\Headers\Rendering\box.h" />
     <ClInclude Include="Source Files\Headers\Rendering\graphics.h" />
     <ClInclude Include="Source Files\Headers\keyboard.h" />
     <ClInclude Include="Source Files\Headers\Mouse.h" />

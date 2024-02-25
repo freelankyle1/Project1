@@ -31,5 +31,5 @@ struct ConstantBuffer2
 struct VertexData
 {
 	DirectX::XMFLOAT3 pos;
-	//DirectX::XMFLOAT4 col;
+	DirectX::XMFLOAT4 col;
 };

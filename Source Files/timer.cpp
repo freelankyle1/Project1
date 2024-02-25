@@ -43,7 +43,7 @@ void windowsTimer::GetFPS(float startFrame, int polyCount)
 		std::stringstream ss;
 		ss.clear();
 
-		ss << "[FPS: " << frames << "] [" << "Polygon Count: " << polyCount << "]" << '\n';
+		ss << "[FPS: " << frames << "] [" << "Vertex Count: " << polyCount << "]" << '\n';
 		OutputDebugString(ss.str().c_str());
 		frames = 0;
 	}

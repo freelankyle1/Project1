@@ -7,12 +7,12 @@
 #include "Headers/Rendering/topology.h"
 
 Renderer2D::Renderer2D(Graphics& gfxDevice)
-	: gfx(gfxDevice)
+	: gfx(gfxDevice), vDataSize(0), indexCount(0)
 {
-	vData = new VertexData[MAX_VERTEX_BYTE_COUNT];
-	memset(vData, 0, MAX_INDEX_BYTE_COUNT);
-	iData = new unsigned short[MAX_INDEX_BYTE_COUNT];
-	memset(iData, 0, MAX_INDEX_BYTE_COUNT);
+	vData = new VertexData[MAX_VERTEX_COUNT];
+	memset(vData, 0, MAX_VERTEX_COUNT * sizeof(VertexData));
+	iData = new unsigned short[MAX_INDEX_COUNT];
+	memset(iData, 0, MAX_INDEX_COUNT * 2);
 
 	VertexShader vs(gfx, L"VertexShader.cso");
 	auto pvsbc = vs.GetByteCode();
@@ -33,7 +33,8 @@ Renderer2D::Renderer2D(Graphics& gfxDevice)
 
 	std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 	{
-		{"Position", 0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0}
+		{"POSITION", 0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0},
+		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
 	InputLayout il(gfx, ied, pvsbc);
@@ -64,24 +65,38 @@ void Renderer2D::Submit(std::shared_ptr<Renderable2D> obj)
 	VertexData* VertexData = obj->GetVertexData();
 	unsigned short* IndexData = obj->GetIndices();
 
-	vData[vDataSize + 0] = VertexData[0];
-	vData[vDataSize + 1] = VertexData[1];
-	vData[vDataSize + 2] = VertexData[2];
-	
-	vDataSize += 3;
+	int VertexCount = obj->GetVertexCount();
+	int IndexCount = obj->GetIndexCount();
 
-	iData[indexCount + 0] = IndexData[0];
-	iData[indexCount + 1] = IndexData[1];
-	iData[indexCount + 2] = IndexData[2];
+	for (int i = 0; i < VertexCount; ++i)
+	{
+		vData[vDataSize + i] = VertexData[i];
+	}
+
+	vDataSize += VertexCount;
+	
+	for (int i = 0; i < IndexCount; ++i)
+		iData[indexCount + i] = IndexData[i];
 	
 	if (indexCount != 0)
 	{
-		iData[indexCount + 0] = iData[(indexCount + 0) - 3] + 3;
-		iData[indexCount + 1] = iData[(indexCount + 1) - 3] + 3;
-		iData[indexCount + 2] = iData[(indexCount + 2) - 3] + 3;
+		if (VertexCount == 4)
+		{
+			for (int i = 0; i < IndexCount; ++i)
+			{
+				iData[indexCount + i] = iData[(indexCount + i) - IndexCount] + VertexCount;
+			}
+		}
+		if (VertexCount == 3)
+		{
+			for (int i = 0; i < IndexCount; ++i)
+			{
+				iData[indexCount + i] = (vDataSize - 3) + i;
+			}
+		}
 	}
 
-	indexCount += 3;
+	indexCount += IndexCount;
 
 	VertexData = nullptr;
 	IndexData = nullptr;
@@ -123,5 +138,4 @@ void Renderer2D::Shutdown()
 	delete[] vData;
 	delete[] iData;
 }
-
 

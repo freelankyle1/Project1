@@ -4,9 +4,9 @@
 #include "vertexbuffer.h"
 #include "indexbuffer.h"
 
-#define MAX_VERTEX_COUNT 50000
-#define MAX_INDEX_BYTE_COUNT MAX_VERTEX_COUNT * 3 //for triangles
-#define MAX_VERTEX_BYTE_COUNT MAX_VERTEX_COUNT * 3
+#define MAX_PRIMITVE_COUNT 90000
+#define MAX_VERTEX_COUNT MAX_PRIMITVE_COUNT * 4 //for quads
+#define MAX_INDEX_COUNT MAX_PRIMITVE_COUNT  * 6
 
 class Renderer2D
 {
