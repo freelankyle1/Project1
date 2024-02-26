@@ -12,8 +12,8 @@ void reportAssertionFailure(HRESULT hr, const char* error, const char* file, int
       #define ASSERT_INFO(expr) OutputDebugStringW(L"\+\+\+\> \n[INFO]: "); OutputDebugStringW(expr); OutputDebugStringW(L": created!\n");
 #else
 
-      #define ASSERT     (...) 
-      #define ASSERT_INFO(...)
+      #define ASSERT     
+      #define ASSERT_INFO
 
 #endif
 

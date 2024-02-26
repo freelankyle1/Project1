@@ -26,6 +26,7 @@ private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain> m_SwapChain;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_RTView;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> m_DsView;
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> m_SamplerState;
 
 	DirectX::XMMATRIX projection;
 	

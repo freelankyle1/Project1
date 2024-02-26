@@ -12,30 +12,8 @@ App::App()
 {
 	m_Wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, (float)SCREEN_HEIGHT / (float)SCREEN_WIDTH, 0.25f, 100.0f));
 	renderer = new Renderer2D(m_Wnd.Gfx());
-
-	/*
+	
 	VertexData dataArr[4];
-
-	for (double y = 5.0f; y > -5.0f; y -= 0.5f)
-	{
-		for (double x = -10.0f; x < 10.0f; x += 0.5f)
-		{
-			dataArr[0].pos = DirectX::XMFLOAT3((float)x, (float)y,		 0.0f);
-			dataArr[0].col = DirectX::XMFLOAT4(0.25f, 0.0f, 0.8f,    1.0f);
-
-			dataArr[1].pos = DirectX::XMFLOAT3((float)x + 0.3f, (float)y + 0.3f, 0.0f);
-			dataArr[1].col = DirectX::XMFLOAT4(0.5f,0.0f,0.5f,       1.0f);
-
-			dataArr[2].pos = DirectX::XMFLOAT3((float)x + 0.3f, (float)y,         0.0f);
-			dataArr[2].col = DirectX::XMFLOAT4(0.8f, 0.9f, 0.25f,    1.0f);
-
-			dataArr[3].pos = DirectX::XMFLOAT3((float)x, (float)y + 0.3f, 0.0f);
-			dataArr[3].col = DirectX::XMFLOAT4(0.0f, 0.0f, 0.5f,     1.0f);
-
-
-			renderer->Submit(std::make_shared<Quad2D>(m_Wnd.Gfx(), dataArr));
-		}
-	}
 
 	dataArr[0].pos = DirectX::XMFLOAT3(-4.0f, -1.0f, 0.0f);
 	dataArr[0].col = DirectX::XMFLOAT4(0.5f, 1.0f, 0.75f, 1.0f);
@@ -66,8 +44,6 @@ App::App()
 	renderer->Submit(std::make_shared<Triangle2D>(m_Wnd.Gfx(), dataArr));
 
 	
-	renderer->StartBatch();
-	*/
 }
 
 App::~App()
@@ -100,9 +76,9 @@ void App::DoFrame()
 	keys::Update(keysdata);
 
 	renderer->BeginScene();
-	for (float y = 5.0f; y > -5.0f; y -= 1.0f)
+	for (float y = 5.0f; y > -5.0f; y -= 0.6f)
 	{
-		for (float x = -10.0f; x < 10.0f; x += 1.0f)
+		for (float x = -10.0f; x < 10.0f; x += 0.6f)
 		{
 			dataArr[0].pos = DirectX::XMFLOAT3(x,        y,       0.0f);
 			dataArr[0].col = DirectX::XMFLOAT4(0.25f, 0.0f, 0.8f, 1.0f);
@@ -119,7 +95,6 @@ void App::DoFrame()
 			renderer->Submit(std::make_shared<Quad2D>(m_Wnd.Gfx(), dataArr));
 		}
 	}
-
 	
 	renderer->Flush();
 	renderer->Update(keysdata.translationX, keysdata.translationY, keysdata.translationZ);

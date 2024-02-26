@@ -91,6 +91,8 @@ Graphics::Graphics(HWND hWnd)
 	vp.TopLeftY = 0.0f;
 	m_DevContext->RSSetViewports(1, &vp);
 
+	D3D11_SAMPLER_DESC samplerDesc = {};
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 }
 
 void Graphics::EndFrame()
