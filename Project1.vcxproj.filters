@@ -90,6 +90,9 @@
     <ClCompile Include="Source Files\quad2d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="libraries\DDSTextureLoader11.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source Files\Headers\window.h">
@@ -161,14 +164,30 @@
     <ClInclude Include="Source Files\Headers\Rendering\quad2d.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="libraries\DDSTextureLoader11.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="PixelShader.cso" />
     <None Include="VertexShader.cso" />
+    <None Include="PSTextureShader.cso" />
+    <None Include="VSTextureShader.cso" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Source Files\Shaders\VertexShader.hlsl" />
     <FxCompile Include="Source Files\Shaders\PixelShader.hlsl" />
+    <FxCompile Include="Source Files\Shaders\PSTextureShader.hlsl" />
+    <FxCompile Include="Source Files\Shaders\VSTextureShader.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Source Files\Textures\woodtexture.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Source Files\cat.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Source Files\Textures\cat.dds" />
   </ItemGroup>
 </Project>

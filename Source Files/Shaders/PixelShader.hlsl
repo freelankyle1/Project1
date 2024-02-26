@@ -12,5 +12,4 @@ struct VS_OUTPUT
 float4 main(VS_OUTPUT input) : SV_TARGET
 {
     return input.col;
-    //return face_colors[tid/2];
 }

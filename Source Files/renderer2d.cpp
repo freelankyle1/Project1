@@ -15,11 +15,11 @@ Renderer2D::Renderer2D(Graphics& gfxDevice)
 	iData = new unsigned short[MAX_INDEX_COUNT];
 	memset(iData, 0, MAX_INDEX_COUNT * 2);
 
-	VertexShader vs(gfx, L"VertexShader.cso");
+	VertexShader vs(gfx, L"VSTextureShader.cso");
 	auto pvsbc = vs.GetByteCode();
 	vs.Bind(gfxDevice);
 
-	PixelShader ps(gfx, L"PixelShader.cso");
+	PixelShader ps(gfx, L"PSTextureShader.cso");
 	ps.Bind(gfxDevice);
 
 	ConstantBuffer2 cb2
@@ -32,10 +32,17 @@ Renderer2D::Renderer2D(Graphics& gfxDevice)
 	PixelConstant pc(gfx, cb2);
 	pc.Bind(gfxDevice);
 
+	/*
 	std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 	{
 		{"POSITION", 0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0},
 		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
+	};
+	*/
+	std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
+	{
+		{"POSITION", 0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0},
+		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
 	InputLayout il(gfx, ied, pvsbc);
@@ -54,6 +61,9 @@ Renderer2D::Renderer2D(Graphics& gfxDevice)
 	vConst = std::make_unique<VertexConstant>(gfx);
 	vConst->Initialize(cb);
 	vConst->Bind(gfx);
+
+	gfx.GetContext()->PSSetSamplers(0, 1, gfx.m_SamplerState.GetAddressOf());
+	gfx.GetContext()->PSSetShaderResources(0, 1, gfx.m_Texture.GetAddressOf());
 
 	stats.DrawCalls = 0;
 	stats.TotalVertices = 0;

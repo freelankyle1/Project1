@@ -11,7 +11,7 @@ Triangle2D::Triangle2D(Graphics& gfx, const VertexData* vData)
 	for (int i = 0; i < 3; i++)
 	{
 		PerVertex[i].pos = vData[i].pos;
-		PerVertex[i].col = vData[i].col;
+		//PerVertex[i].col = vData[i].col;
 
 
 		indices[i] = i;

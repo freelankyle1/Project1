@@ -11,7 +11,7 @@ Quad2D::Quad2D(Graphics& gfxDevice, const VertexData* vData)
 	for (int i = 0; i < 4; i++)
 	{
 		PerVertex[i].pos = vData[i].pos;
-		PerVertex[i].col = vData[i].col;
+		PerVertex[i].tex = vData[i].tex;
 	}
 
 	indices[0] = 0;
