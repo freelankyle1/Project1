@@ -6,6 +6,7 @@ namespace keys
 	struct KeysData
 	{
 		float translationX = 0.0f;
+		float translationY = 0.0f;
 		float translationZ = 0.0f;
 		float rotationY = 0.0f;
 	};
@@ -16,9 +17,11 @@ namespace keys
 	bool IsKeyPressed(char keyCode);
 	void Update(KeysData& keysdata);
 
-	void ButtonDown(bool whichButton);
-	void ButtonUp(bool whichButton);
-	bool IsButtonPressed(bool whichButton);
+	void ButtonDown(unsigned short whichButton);
+	void ButtonUp(unsigned short whichButton);
+	bool IsButtonPressed(unsigned short whichButton);
+	void ResetMouseState();
+
 	
 	void Shutdown();
 }

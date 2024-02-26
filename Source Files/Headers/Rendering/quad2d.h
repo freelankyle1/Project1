@@ -13,6 +13,5 @@ public:
 	virtual unsigned int GetIndexCount() const override;
 	
 	VertexData* PerVertex;
-	//unsigned short* indices;
 	unsigned short* indices;
 };

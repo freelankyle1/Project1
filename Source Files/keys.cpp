@@ -5,12 +5,19 @@
 namespace keys
 {
 	bool* Keys = new bool[256];
+	bool* mouse = new bool[4];
+
+	static float mouseWheelDelta = 0.0f;
 
 	void Init()
 	{
 		for (int i = 0; i < 256; i++)
 		{
 			Keys[i] = false;
+		}
+		for (int i = 0; i < 4; i++)
+		{
+			mouse[i] = false;
 		}
 	}
 	void ProcessKeyDown(bool prevKeyState, bool transitionState, char keyCode)
@@ -29,6 +36,7 @@ namespace keys
 	void Update(KeysData& keysdata)
 	{
 		keysdata.translationX = 0.0f;
+		keysdata.translationY = 0.0f;
 		keysdata.translationZ = 0.0f;
 		keysdata.rotationY = 0.0f;
 
@@ -36,31 +44,38 @@ namespace keys
 			keysdata.translationX = 0.045f;
 		if (keys::IsKeyPressed(68) != false)
 			keysdata.translationX = -0.045f;
+
 		if (keys::IsKeyPressed(87) != false)
-			keysdata.translationZ = -0.020f;
+			keysdata.translationY = -0.040f;
 		if (keys::IsKeyPressed(83) != false)
-			keysdata.translationZ = 0.020f;
-		if (keys::IsButtonPressed(0) == true) //is the left button (index 0) pressed
-			keysdata.rotationY = 0.025f;
-		if (keys::IsButtonPressed(1) == true) //is the left button (index 0) pressed
-			keysdata.rotationY = -0.025f;
+			keysdata.translationY =  0.040f;
+
+		if (keys::IsButtonPressed(2) != false)
+			keysdata.translationZ = -0.25f;
+
+		if (keys::IsButtonPressed(3) != false)
+			keysdata.translationZ =  0.25f;
 	}
 
 
-	bool* mouse = new bool[2];
-
-	void ButtonDown(bool whichButton)
+	void ButtonDown(unsigned short whichButton)
 	{
 		mouse[whichButton] = true;
 	}
-	void ButtonUp(bool whichButton)
+	void ButtonUp(unsigned short whichButton)
 	{
 		mouse[whichButton] = false;
 	}
-	bool IsButtonPressed(bool whichButton)
+	bool IsButtonPressed(unsigned short whichButton)
 	{
 		return mouse[whichButton];
 	}
+	void ResetMouseState()
+	{
+		for (int i = 0; i < 4; i++)
+			mouse[i] = false;
+	}
+	
 
 
 	void Shutdown()

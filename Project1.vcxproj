@@ -149,7 +149,6 @@
     <ClCompile Include="Source Files\inputlayout.cpp" />
     <ClCompile Include="Source Files\keys.cpp" />
     <ClCompile Include="Source Files\mouse.cpp" />
-    <ClCompile Include="Source Files\Keyboard.cpp" />
     <ClCompile Include="Source Files\main.cpp" />
     <ClCompile Include="Source Files\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -169,19 +168,16 @@
   <ItemGroup>
     <ClInclude Include="Source Files\Headers\app.h" />
     <ClInclude Include="Source Files\Headers\asserts.h" />
-    <ClInclude Include="Source Files\Headers\d3dapp.h" />
     <ClInclude Include="Source Files\Headers\d3dexception.h" />
     <ClInclude Include="Source Files\Headers\keys.h" />
     <ClInclude Include="Source Files\Headers\Rendering\bindable.h" />
     <ClInclude Include="Source Files\Headers\Rendering\globals.h" />
     <ClInclude Include="Source Files\Headers\Rendering\graphics.h" />
-    <ClInclude Include="Source Files\Headers\keyboard.h" />
     <ClInclude Include="Source Files\Headers\Mouse.h" />
     <ClInclude Include="Source Files\Headers\Rendering\indexbuffer.h" />
     <ClInclude Include="Source Files\Headers\Rendering\inputlayout.h" />
     <ClInclude Include="Source Files\Headers\Rendering\pixelconstants.h" />
     <ClInclude Include="Source Files\Headers\Rendering\quad2d.h" />
-    <ClInclude Include="Source Files\Headers\Rendering\renderable.h" />
     <ClInclude Include="Source Files\Headers\Rendering\renderable2d.h" />
     <ClInclude Include="Source Files\Headers\Rendering\renderer2d.h" />
     <ClInclude Include="Source Files\Headers\Rendering\shader.h" />

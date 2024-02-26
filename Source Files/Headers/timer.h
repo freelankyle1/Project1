@@ -13,7 +13,7 @@ public:
 
 	void Tick();
 	double CurrTime() const;
-	void GetFPS(float startFrame, int polyCount);
+	void GetFPS(float startFrame, int polyCount, int DrawCalls);
 
 
 private:

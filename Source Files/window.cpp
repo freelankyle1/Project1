@@ -107,7 +107,7 @@ std::optional<int> window::ProcessMessages()
 {
     MSG msg = { 0 };
 
-    while (PeekMessageA(&msg, nullptr, 0, 0, PM_REMOVE))
+    while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
     {
         if (msg.message == WM_QUIT)
         {
@@ -156,6 +156,9 @@ LRESULT CALLBACK window::HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPAR
 
 LRESULT window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
+    float delta = 0.0f;
+    std::stringstream ss;
+
     switch (msg)
     {
     case(WM_CLOSE):
@@ -163,7 +166,6 @@ LRESULT window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
         return 0;
 
     case WM_KILLFOCUS:
-        kbd.ClearState();
         break;
 
     case (WM_MOUSEMOVE):
@@ -226,14 +228,13 @@ LRESULT window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
     case (WM_MOUSEWHEEL):
     {
         const POINTS pt = MAKEPOINTS(lParam);
-        if (GET_WHEEL_DELTA_WPARAM(wParam) > 0)
-        {
-            m_mouse.OnWheelUp(pt.x, pt.y);
-        }
-        else if (GET_WHEEL_DELTA_WPARAM(wParam) < 0)
-        {
-            m_mouse.OnWheelDown(pt.x, pt.y);
-        }
+        delta = GET_WHEEL_DELTA_WPARAM(wParam);
+
+        if (delta > 0)
+            keys::ButtonDown(2);
+        if (delta < 0)
+            keys::ButtonDown(3);
+        
         break;
     }
 
@@ -250,9 +251,9 @@ LRESULT window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
     }
     
     case(WM_CHAR):
-        kbd.OnChar(static_cast<unsigned char>(wParam));
         break;
     }
+
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 

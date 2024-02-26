@@ -1,7 +1,6 @@
 #pragma once
 #include "pch.h"
 #include "d3dexception.h"
-#include "keyboard.h"
 #include "Mouse.h"
 #include "Rendering/graphics.h"
 
@@ -59,7 +58,6 @@ private:
 	LRESULT HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 	
 public:
-	Keyboard kbd;
 	kMouse m_mouse;
 
 

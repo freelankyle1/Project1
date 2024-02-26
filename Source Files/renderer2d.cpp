@@ -6,6 +6,7 @@
 #include "Headers/Rendering/inputlayout.h"
 #include "Headers/Rendering/topology.h"
 
+
 Renderer2D::Renderer2D(Graphics& gfxDevice)
 	: gfx(gfxDevice), vDataSize(0), indexCount(0)
 {
@@ -53,15 +54,33 @@ Renderer2D::Renderer2D(Graphics& gfxDevice)
 	vConst = std::make_unique<VertexConstant>(gfx);
 	vConst->Initialize(cb);
 	vConst->Bind(gfx);
+
+	stats.DrawCalls = 0;
+	stats.TotalVertices = 0;
+}
+
+void Renderer2D::BeginScene()
+{
+	gfx.ClearBuffer(0.0f, 0.0f, 0.0f);
 }
 
 void Renderer2D::Flush()
 {
+	StartBatch();
 	gfx.DrawIndexed(indexCount);
+
+	stats.DrawCalls++;
+
+	vDataSize = 0;
+	indexCount = 0;
+
 }
 
 void Renderer2D::Submit(std::shared_ptr<Renderable2D> obj)
 {
+	if (indexCount >= MAX_INDEX_COUNT)
+		Flush();
+
 	VertexData* VertexData = obj->GetVertexData();
 	unsigned short* IndexData = obj->GetIndices();
 
@@ -74,25 +93,16 @@ void Renderer2D::Submit(std::shared_ptr<Renderable2D> obj)
 	}
 
 	vDataSize += VertexCount;
+	stats.TotalVertices += VertexCount;
 	
 	for (int i = 0; i < IndexCount; ++i)
 		iData[indexCount + i] = IndexData[i];
 	
 	if (indexCount != 0)
 	{
-		if (VertexCount == 4)
+		for (int i = 0; i < IndexCount; ++i)
 		{
-			for (int i = 0; i < IndexCount; ++i)
-			{
-				iData[indexCount + i] = iData[(indexCount + i) - IndexCount] + VertexCount;
-			}
-		}
-		if (VertexCount == 3)
-		{
-			for (int i = 0; i < IndexCount; ++i)
-			{
-				iData[indexCount + i] = (vDataSize - 3) + i;
-			}
+			iData[indexCount + i] = iData[(indexCount + i) - IndexCount] + VertexCount;
 		}
 	}
 
@@ -112,30 +122,44 @@ void Renderer2D::StartBatch()
 }
 
 static float translationX = 0.0f;
+static float translationY = 0.0f;
 static float translationZ = 5.0f;
 
 void Renderer2D::Update(float transX, float transY, float transZ)
 {
 	translationX += transX;
+	translationY += transY;
 	translationZ += transZ;
 
 	ConstantBuffer cb = {
 		DirectX::XMMatrixTranspose(
-			DirectX::XMMatrixTranslation(translationX, 0.0f, translationZ) * gfx.GetProjection())
+			DirectX::XMMatrixTranslation(translationX, translationY, translationZ) * gfx.GetProjection())
 	};
 
 	vConst->UpdateConstant(cb);
 }
 
-//debugging purposes
-int Renderer2D::GetVertexAmount() const
+void Renderer2D::EndScene()
 {
-	return vDataSize;
+	gfx.EndFrame();
 }
+
 
 void Renderer2D::Shutdown()
 {
 	delete[] vData;
 	delete[] iData;
+}
+
+//debugging purposes
+const RendererStats& Renderer2D::GetStats()
+{
+	return stats;
+}
+
+void Renderer2D::EndStats()
+{
+	stats.DrawCalls = 0;
+	stats.TotalVertices = 0;
 }
 

@@ -32,7 +32,7 @@ double windowsTimer::CurrTime() const
 	return delta;
 }
 
-void windowsTimer::GetFPS(float startFrame, int polyCount)
+void windowsTimer::GetFPS(float startFrame, int polyCount, int DrawCalls)
 {
 	this->Tick();
 	float betweenFrame = this->CurrTime();
@@ -43,7 +43,7 @@ void windowsTimer::GetFPS(float startFrame, int polyCount)
 		std::stringstream ss;
 		ss.clear();
 
-		ss << "[FPS: " << frames << "] [" << "Vertex Count: " << polyCount << "]" << '\n';
+		ss << "[FPS: " << frames << "] [" << "Vertex Count: " << polyCount << "]" << "[Draw Calls: " << DrawCalls << "]" << '\n';
 		OutputDebugString(ss.str().c_str());
 		frames = 0;
 	}

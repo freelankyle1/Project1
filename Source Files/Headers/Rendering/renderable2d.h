@@ -13,6 +13,5 @@ public:
 	virtual unsigned int GetVertexCount() const = 0;
 	virtual unsigned short* GetIndices() const = 0;
 	virtual unsigned int GetIndexCount() const = 0;
-
 };
 
